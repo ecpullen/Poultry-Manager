@@ -2,15 +2,49 @@
 <html>
 <head>
 	<title>Poultry Manager</title>
+	<link rel="stylesheet" type="text/css" href="style.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="main.js"></script>
 </head>
 <body>
 <header>
-	<button onclick="$('login').show()">Sign In</button>
+	<button onclick="$('#login').show()">Sign In</button>
 
-	<div id="login">
-		Test
-	</div>
 </header>
+	<div id="login">
+		<fieldset>
+			<legend>Sign In</legend>
+			<form action="main.php" method="POST">
+				Username:<br />
+				<input type="text" name="username" required>
+				<br />
+				Password:<br />
+				<input type="password" name="password" required>
+				<br />
+				<input type="submit" name="submit">
+			</form>
+		</fieldset>
+		<button onclick="$('#login').hide();$('#signup').show()">Sign Up</button>
+	</div>
+	<div id="signup">
+		<fieldset>
+			<legend>Sign Up</legend>
+			<form id="signupform" action="signup.php" method="POST">
+				Email:<br />
+				<input type="email" name="email" required>
+				<br />
+				Username:<br />
+				<input type="text" name="username" required>
+				<br />
+				Password:<br />
+				<input type="password" name="spassword" required>
+				<br />
+				Confirm Password:<br />
+				<input type="password" name="sconfirmpassword" required>
+				<br />
+				<input type="submit" name="submit">
+			</form>
+		</fieldset>
+	</div>
 </body>
 </html>

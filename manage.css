@@ -1,0 +1,150 @@
+html{
+	height: 100%;
+}
+
+body{
+	height: 100%
+}
+
+header{
+	display: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	height: 50px;
+	background: rgba(0,0,0,.8);
+	color: #CCC;
+}
+
+header .mainlink{
+	text-align: center;
+	display: inline-block;
+	height: 50px;
+	width: 14%;
+}
+
+header .mainlink:hover{
+	background-color: rgba(0,0,0,.2);
+}
+
+#main{
+	height: calc(100% - 60px);
+}
+
+.display{
+	max-height: calc(100% - 50px);
+	overflow: scroll;
+}
+
+.head{
+	background-color: #DFD;
+	background: black;
+	color: white;
+	margin-top: 10px;
+}
+
+.head p{
+	font-weight: bold;
+}
+
+.display :nth-child(odd){
+	background-color: #FDD;
+	background: #DDD;
+}
+
+.display :nth-child(even){
+	background-color: #DDF;
+	background: #FFF;
+}
+
+.row :nth-child(even), .row :nth-child(odd){
+	background-color: inherit;
+}
+
+.row p, .row .p{
+	display: inline-block;
+	width: 200px;
+	text-align: center;
+}
+
+.row .s{
+	width: 100px;
+}
+
+.row .l{
+	width: 300px;
+}
+
+.row form input{
+	display: inline-block;
+	width: 194px;
+}
+
+.row form{
+	display: inline-block;
+}
+
+.quantity{
+	width: 30px;
+	margin:0 10px;
+}
+
+.tag{
+	width: 400px;
+	height: 600px;
+	border: 1px solid black;
+	display: inline-block;
+	text-align: center;
+}
+
+.tag p{
+	font-size: 150%;
+}
+
+@media print {
+    header, form, fieldset,input {
+        display: none;
+    }
+    .row .p{
+		display: none;
+	}
+	.row p{
+		width: 18%;
+	}
+    .row .s{
+		width: 9%;
+	}
+	.row .l{
+		width: 27%;
+	}
+	.row form{
+		display: none;
+	}
+
+	.page{
+		page-break-after: always;
+	}
+	body{
+		width: 8.5in;
+		margin: none;
+		border: none;
+		padding: none;
+	}
+	.tag{
+		border:1px;
+		font-size: 75%;
+		margin: none;
+		border: 1px solid black;
+		padding: none;
+		width: 4.2in;
+		height: 5.3in;
+	}
+
+	.tag :first-child{
+		margin-top: 1in;
+	}
+	/*.tags{
+		-webkit-transform: rotate(-90deg); 
+		-moz-transform:rotate(-90deg);
+	}*/
+}

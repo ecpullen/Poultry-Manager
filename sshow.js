@@ -1,0 +1,14 @@
+$(document).ready(function(){
+	$("#show").click(function(){
+		console.log("here")
+		window.location.replace("show.php?p=home");
+	})
+	$("#ex").click(function(){
+		console.log("here")
+		window.location.replace("show.php?p=ex");
+	})
+	$("#birds").click(function(){
+		console.log("here")
+		window.location.replace("show.php?p=birds");
+	})
+})
