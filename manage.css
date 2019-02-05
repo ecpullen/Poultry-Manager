@@ -36,6 +36,10 @@ header .mainlink:hover{
 	overflow: scroll;
 }
 
+.m{
+	max-height: calc(100% - 220px);
+}
+
 .head{
 	background-color: #DFD;
 	background: black;
@@ -59,6 +63,10 @@ header .mainlink:hover{
 
 .row :nth-child(even), .row :nth-child(odd){
 	background-color: inherit;
+}
+
+.display .head{
+	background: black;
 }
 
 .row p, .row .p{
@@ -143,8 +151,8 @@ header .mainlink:hover{
 	.tag :first-child{
 		margin-top: 1in;
 	}
-	/*.tags{
-		-webkit-transform: rotate(-90deg); 
-		-moz-transform:rotate(-90deg);
-	}*/
+
+	.display{
+		overflow: visible;
+	}
 }

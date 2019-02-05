@@ -15,7 +15,6 @@ if(isset($_SESSION["username"])&&isset($_POST["show_name"])){
 			die("<h1>An error occured</h1><a href='index.html'>Try Again</a>");
 		}
 		$query = "INSERT INTO shows (admin_id, name) VALUES ($user[id],".$db->quote($_POST[show_name]).")";
-		// echo $query;
 		$db->query($query);
 		$conn = new PDO("mysql:host=127.0.0.1","root","admin123");
 		$conn->exec("create database if not exists $_POST[show_name];");
@@ -23,7 +22,7 @@ if(isset($_SESSION["username"])&&isset($_POST["show_name"])){
 		$showdb = new PDO("mysql:dbname=$_POST[show_name];host=127.0.0.1",
 			"root",
 			"admin123");
-		$showdb->query("create table exhibitors(
+		$showdb->query("CREATE TABLE exhibitors(
 			id int(4) NOT NULL AUTO_INCREMENT,
 			name VARCHAR(30),
 			address VARCHAR(60),
@@ -34,13 +33,13 @@ if(isset($_SESSION["username"])&&isset($_POST["show_name"])){
 			phone VARCHAR(20),
 			PRIMARY KEY (id)
 			);");
-		$showdb->query("create table awards(
+		$showdb->query("CREATE TABLE awards(
 			type VARCHAR(5),
 			number INT(3),
 			place INT(2),
 			bird_id INT(5)
 			);");
-		$showdb->query("create table birds(
+		$showdb->query("CREATE TABLE birds(
 			id int(5) NOT NULL AUTO_INCREMENT,
 			ex_id int(4),
 			age VARCHAR(10),

@@ -7,33 +7,22 @@
 <html>
 <?php 
 	if(isset($_SESSION["username"])){
-		try{
-			$db = new PDO("mysql:dbname=info;host=127.0.0.1",
-				"root",
-				"admin123");
-			$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-			$query = "select * from users where password = ".$db->quote($_SESSION["password"])." and username = ".$db->quote($_SESSION["username"]).";";
-			//echo $query;
-			$rows = $db->query($query);
-			$user = $rows->fetch();
-			if($rows->rowCount()==0){
-				die("<h1>An error occured</h1><a href='index.html'>Try Again</a>");
-			}
-
-			if(isset($_POST["show_name"])||isset($_SESSION["show_id"])){
-				if(isset($_POST["show_name"])){
-					$query = "select * from shows where admin_id = $user[id] and name = ".$db->quote($_POST[show_name]).";";
-					// echo($query);
-					$rows = $db->query($query);
-					if($rows->rowCount() == 0){
-						die("<h1>Show not found</h1><a href='main.php'>Try Again</a>");
-					}
-					$show = $rows->fetch();
+			if(isset($_POST["show_id"])||isset($_SESSION["show_id"])||isset($_POST["show_name"])){
+				if($_POST[show_name] != ""){
+					$arr = val_and_showdb($_SESSION[username],$_SESSION[password],id_from_sname($_POST[show_name]));
+					$show = $arr[show];
+					$_SESSION["show_id"] = $show[id];
+					$_SESSION["state"] = "home";
+				}
+				elseif(isset($_POST["show_id"])){	
+					$arr = val_and_showdb($_SESSION[username],$_SESSION[password],$_POST[show_id]);
+					$show = $arr[show];
 					$_SESSION["show_id"] = $show[id];
 					$_SESSION["state"] = "home";
 				}
 				else{
-					$show = $db->query("SELECT * FROM shows WHERE id = $_SESSION[show_id]")->fetch();
+					$arr = val_and_showdb($_SESSION[username],$_SESSION[password],$_SESSION[show_id	]);
+					$show = $arr[show];
 				}
 				$showdb = new PDO("mysql:dbname=$show[name];host=127.0.0.1",
 				"root",
@@ -84,9 +73,19 @@
 			case 'birds':
 				require("showbirds.php");
 				break;
+			case 'cs':
+				require("showcs.php");
+				break;
+			case 'ct':
+				require("showct.php");
+				break;
 			default:
+				require("showhome.php");
 				break;
 		}
+	}
+	else{
+		require("showhome.php");
 	}
 ?>
 </div>
@@ -111,10 +110,7 @@
 		</fieldset>
 <?php
 			}
-		}
-		catch(PDOException $e){
-			die($e);
-		}
+		
 	}
 	else{
 		die("<h1>An error occured</h1><a href='index.html'>Try Again</a>");

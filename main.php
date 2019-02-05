@@ -63,7 +63,7 @@
 ?>
 	<form action="show.php" method="post">
 		<input type="submit" value="<?=$show['name']?>">
-		<input type="hidden" name="show_name" value="<?=$show['name']?>">
+		<input type="hidden" name="show_id" value="<?=$show[id]?>">
 	</form>
 <?php
 		}
