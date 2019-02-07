@@ -4,6 +4,9 @@
 		try{
 			$arr = val_and_showdb($_SESSION[username],$_SESSION[password],$_SESSION[show_id]);
 			$birds = birds($arr[show]);
+	if($_POST["final"]){
+		finalize($arr[show]);
+	}
 ?>
 <div class="row head">
 	<p class="s">ID</p>
@@ -12,7 +15,11 @@
 	<p>BREED</p>
 	<p class="l">VARIETY</p>
 	<p class="s">AGE/SEX</p>
+	<form action="show.php?p=birds" method="POST">
+		<input id="finalize" type="submit" name="final" value="Finalize">
+	</form>
 </div>
+
 <div class="display">
 <?php
 			foreach ($birds as $bird) {

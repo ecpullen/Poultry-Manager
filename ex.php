@@ -7,7 +7,9 @@
 <head>
 	<title>Exhibitor</title>
 	<link rel="stylesheet" type="text/css" href="manage.css">
+	<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 	<script src="manager.js"></script>
 </head>
 <body>
@@ -16,7 +18,6 @@
 		try{
 			$arr = val_and_showdb($_SESSION[username],$_SESSION[password],$_SESSION[show_id]);
 			$show = $arr[show];
-			$showdb = $arr[showdb];
 ?>
 	<header>
 		<div id="show" class="mainlink">
@@ -43,54 +44,45 @@
 	</header>
 <?php
 			if(isset($_POST[name])){
-				if(isset($_POST[id]) || $showdb->query("SELECT * FROM exhibitors WHERE name=".$showdb->quote($_POST[name]).";")->rowCount() != 0){
+				if(isset($_POST[id]) || ex_exists($show,$_POST[name])){
 					if($_POST[id] != ""){
 						$q = "id = ".$_POST[id];
 						$_POST[ex] = $_POST[id];
 					}
 					else{
-						$q = "name = ".$_POST[name];
-						$_POST[ex] = $showdb->query("SELECT * FROM exhibitors WHERE name=".$showdb->quote($_POST[name]).";")->fetch()[id];
+						$q = "name = ".db()->quote($_POST[name]);
+						$_POST[ex] = get_ex_by_name($show,$_POST[name])[id];
 					}
-					$showdb->query("UPDATE exhibitors SET name =".$showdb->quote($_POST[name]).", address =".$showdb->quote($_POST[address]).", city=".$showdb->quote($_POST[city]).", state=".$showdb->quote($_POST[state]).", email=".$showdb->quote($_POST[email]).", phone=".$showdb->quote($_POST[phone])." where ".$q.";");
+					update_ex($show, "name =".db()->quote($_POST[name]).", address =".db()->quote($_POST[address]).", city=".db()->quote($_POST[city]).", state=".db()->quote($_POST[state]).", email=".db()->quote($_POST[email]).", phone=".db()->quote($_POST[phone]),$q);
 				}
 				else{
-						$showdb->query("INSERT INTO exhibitors (name,address,city,state,zip,email,phone) VALUES (".$showdb->quote($_POST[name]).",".$showdb->quote($_POST[address]).",".$showdb->quote($_POST[city]).",".$showdb->quote($_POST[state]).",".$showdb->quote($_POST[zip]).",".$showdb->quote($_POST[email]).",".$showdb->quote($_POST[phone]).");");
-						$_POST[ex] = $showdb->query("SELECT * FROM exhibitors WHERE name=".$showdb->quote($_POST[name]).";")->fetch()[id];
+						add_ex($show,$_POST[name],$_POST[address],$_POST[city],$_POST[state],$_POST[zip],$_POST[email],$_POST[phone]);
+						$_POST[ex] = get_ex_by_name($show,$_POST[name])[id];
 				}
-				
 			}
 			if(isset($_POST[ex])){
-				$ex = $showdb->query("SELECT * FROM exhibitors WHERE id=".$showdb->quote($_POST[ex]).";")->fetch();
+				$ex = get_ex($show, $_POST[ex]);
 				if(isset($_POST[breed]) && $_POST[age] == ""){
-					$q = "SELECT breeds.id FROM breeds JOIN divisions ON divisions.class_id = breeds.class_id WHERE divisions.division like ".$showdb->quote($_POST[division])." AND breeds.breed like ".$showdb->quote($_POST[breed]).";";
-					// echo $q;
-					$breed_id = $showdb->query($q)->fetch()[id];
-					// print_r($_POST);
+					$ids = get_ids($_POST[division],$_POST[breed],$_POST[variety]);
 					for($i = 0; $i < $_POST[cock]; $i++){
-						$q = "INSERT INTO birds (ex_id,age,variety,breed_id) VALUES ($ex[id],'cock',".$showdb->quote($_POST[variety]).",$breed_id);";
-						// echo $q;
-						$showdb->query($q);
+						add_bird($show,$ex[id],$ids[breed_id],$ids[variety_id],1,$_POST[frizzle]);
 					}
 					for($i = 0; $i < $_POST[hen]; $i++){
-						$q = "INSERT INTO birds (ex_id,age,variety,breed_id) VALUES ($ex[id],'hen',".$showdb->quote($_POST[variety]).",$breed_id);";
-						$showdb->query($q);
+						add_bird($show,$ex[id],$ids[breed_id],$ids[variety_id],2,$_POST[frizzle]);
 					}
 					for($i = 0; $i < $_POST[cockerel]; $i++){
-						$q = "INSERT INTO birds (ex_id,age,variety,breed_id) VALUES ($ex[id],'cockerel',".$showdb->quote($_POST[variety]).",$breed_id);";
-						$showdb->query($q);
+						add_bird($show,$ex[id],$ids[breed_id],$ids[variety_id],3,$_POST[frizzle]);
 					}
 					for($i = 0; $i < $_POST[pullet]; $i++){
-						$q = "INSERT INTO birds (ex_id,age,variety,breed_id) VALUES ($ex[id],'pullet',".$showdb->quote($_POST[variety]).",$breed_id);";
-						$showdb->query($q);
+						add_bird($show,$ex[id],$ids[breed_id],$ids[variety_id],4,$_POST[frizzle]);
 					}
 				}
 				elseif(isset($_POST[breed])){
-					$breed_id = $showdb->query("SELECT breeds.id FROM breeds JOIN classes ON breeds.class_id = classes.id WHERE breeds.breed like ".$showdb->quote($_POST[breed])." AND classname like ".$showdb->quote($_POST[classname]))->fetch()[id];
-					$showdb->query("UPDATE birds SET age = ".$showdb->quote($_POST[age]).", variety = ".$showdb->quote($_POST[variety]).", breed_id = ".$showdb->quote($breed_id)." WHERE id = $_POST[id]");
+					$ids = get_ids_with_class($_POST[classname],$_POST[breed],$_POST[variety]);
+					update_bird($_POST[id],$show,$ex[id],$ids[breed_id],$ids[variety_id],4,$_POST[frizzle]);
 				}
 				elseif($_POST[delete] != ""){
-					$showdb->query("DELETE FROM birds WHERE id = $_POST[delete]");
+					delete($show, $_POST["delete"]);
 				}
 ?>
 		<fieldset>
@@ -116,6 +108,7 @@
 						 WF <input type="radio" name="division" value="Waterfowl">
 				Breed: <input type="text" name="breed" required>
 				Variety: <input type="text" name="variety">
+				Frizzled:<input type="checkbox" name="frizzled">
 				Cock: <input class = "quantity" type="number" name="cock">
 				Hen: <input class = "quantity" type="number" name="hen">
 				Cockerel: <input class = "quantity" type="number" name="cockerel">
@@ -125,7 +118,7 @@
 			</form>
 		</fieldset>
 <?php
-				$birds = $showdb->query("SELECT birds.id,classname,breed,variety,age FROM birds JOIN breeds ON breeds.id = birds.breed_id JOIN classes ON classes.id = breeds.class_id WHERE ex_id=".$_POST[ex]);
+				$birds = birds_by_ex($show,$ex[id]);
 ?>
 <div class="row head">
 	<p class="s">ID</p>
@@ -145,6 +138,18 @@
 		<input type="text" name="classname" value="<?=$bird[classname]?>">
 		<input type="text" name="breed" value="<?=$bird[breed]?>">
 		<input type="text" name="variety" value="<?=$bird[variety]?>">
+<?php
+	if($bird[frizzled]){
+?>
+		<input type="checkbox" name="frizzled" checked>
+<?php 
+	}
+	else{
+?>
+		<input type="checkbox" name="frizzled">
+<?php
+	}
+?>
 		<input type="text" name="age" value="<?=$bird[age]?>">
 		<input type="hidden" name="id" = value="<?=$bird[id]?>">
 		<input type="hidden" name="ex" value="<?=$ex[id]?>">
@@ -195,5 +200,41 @@
 		}
 	}
 ?>
+<script type="text/javascript">
+	$(document).ready(function(){
+		$("input[name=\"breed\"]").on('input',function(){
+			$.ajax({url:"auto.php",
+			data:{division: $("input[name='division']:checked").val(),breed:$("input[name=\"breed\"]").val()},
+			method:"POST",
+			dataType:"text",
+			success:function(result){
+				console.log(result)
+				 $("input[name=\"breed\"]").autocomplete({
+      				source: JSON.parse(result)
+    			});
+			},
+			error: function(error){
+				alert("error")
+				console.log(error)
+			}});
+		})
+		$("input[name=\"variety\"]").on('input',function(){
+			$.ajax({url:"auto.php",
+			data:{division: $("input[name='division']:checked").val(), breed:$("input[name=\"breed\"]").val(), variety:$("input[name=\"variety\"]").val()},
+			method:"POST",
+			dataType:"text",
+			success:function(result){
+				console.log(result)
+				 $("input[name=\"variety\"]").autocomplete({
+      				source: JSON.parse(result)
+    			});
+			},
+			error: function(error){
+				alert("error")
+				console.log(error)
+			}});
+		})
+	})
+</script>
 </body>
 </html>

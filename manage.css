@@ -109,6 +109,17 @@ header .mainlink:hover{
 	font-size: 150%;
 }
 
+.head form {
+    width: 300px;
+    text-align: right;
+}
+
+#finalize{
+	background-color: white;
+	color: black;
+	text-align: center;
+}
+
 @media print {
     header, form, fieldset,input {
         display: none;
@@ -137,6 +148,9 @@ header .mainlink:hover{
 		margin: none;
 		border: none;
 		padding: none;
+	}
+	.head{
+		color: black;
 	}
 	.tag{
 		border:1px;

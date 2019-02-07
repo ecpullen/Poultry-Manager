@@ -16,7 +16,7 @@
 					$age = $bird[age];
 					$var = $bird[variety];
 					$breed = $bird[breed];
-					$q = "SELECT * from birds JOIN breeds ON birds.breed_id = breeds.id JOIN classes on breeds.class_id = classes.id WHERE classname = '$bird[classname]' and breed = '$breed' and variety = '$var'";
+					$q = "SELECT * from birds where breed_id = $bird[breed_id] and variety_id = $bird[variety_id]";
 					$count = $showdb->query($q)->rowCount();
 ?>
 </div>

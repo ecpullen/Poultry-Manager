@@ -24,7 +24,7 @@
 					$arr = val_and_showdb($_SESSION[username],$_SESSION[password],$_SESSION[show_id	]);
 					$show = $arr[show];
 				}
-				$showdb = new PDO("mysql:dbname=$show[name];host=127.0.0.1",
+				$showdb = new PDO("mysql:dbname=_$show[id];host=127.0.0.1",
 				"root",
 				"admin123");
 				$showdb->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);

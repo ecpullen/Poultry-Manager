@@ -16,10 +16,11 @@ if(isset($_SESSION["username"])&&isset($_POST["show_name"])){
 		}
 		$query = "INSERT INTO shows (admin_id, name) VALUES ($user[id],".$db->quote($_POST[show_name]).")";
 		$db->query($query);
+		$id = $db->query("select id from shows where name = ".$db->quote($_POST[show_name]).";")->fetch()[id];
 		$conn = new PDO("mysql:host=127.0.0.1","root","admin123");
-		$conn->exec("create database if not exists $_POST[show_name];");
+		$conn->exec("create database if not exists _$id;");
 
-		$showdb = new PDO("mysql:dbname=$_POST[show_name];host=127.0.0.1",
+		$showdb = new PDO("mysql:dbname=_$id;host=127.0.0.1",
 			"root",
 			"admin123");
 		$showdb->query("CREATE TABLE exhibitors(
@@ -42,21 +43,31 @@ if(isset($_SESSION["username"])&&isset($_POST["show_name"])){
 		$showdb->query("CREATE TABLE birds(
 			id int(5) NOT NULL AUTO_INCREMENT,
 			ex_id int(4),
-			age VARCHAR(10),
-			variety VARCHAR(50),
+			age_id VARCHAR(10),
+			variety_id VARCHAR(50),
 			breed_id int(11),
+			frizzle BOOLEAN,
 			PRIMARY KEY (id)
 			);");
 		$showdb->exec("CREATE TABLE divisions LIKE info.divisions;
 						INSERT INTO divisions  
     					SELECT * FROM info.divisions;");
-
 		$showdb->exec("CREATE TABLE classes LIKE info.classes;
 						INSERT INTO classes  
     					SELECT DISTINCT * FROM info.classes;");
 		$showdb->exec("CREATE TABLE breeds LIKE info.breeds;
 						INSERT INTO breeds  
     					SELECT * FROM info.breeds;");
+		$showdb->exec("CREATE TABLE varieties LIKE info.varieties;
+						INSERT INTO varieties  
+    					SELECT * FROM info.varieties;");
+		$showdb->exec("CREATE TABLE ages LIKE info.ages;
+						INSERT INTO ages  
+    					SELECT * FROM info.ages;");
+		$showdb->exec("CREATE TABLE cbv LIKE info.cbv;
+						INSERT INTO cbv  
+    					SELECT * FROM info.cbv;");
+
 		echo "sucessfully created $_POST[show_name]";
 	}
 	catch(PDOException $e){
