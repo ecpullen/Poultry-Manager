@@ -1,0 +1,57 @@
+html{
+	width: 600px;
+}
+
+.floatingHeader {
+  position: fixed;
+  top: 0;
+  visibility: hidden;
+}
+
+.floatingHeader2 {
+  position: fixed;
+  top: 50px;
+  visibility: hidden;
+}
+
+.row p, .row .p{
+	display: inline-block;
+	width: 200px;
+	text-align: center;
+}
+
+.row .s{
+	width: 100px;
+}
+
+.row .l{
+	width: 300px;
+}
+.row form{
+	margin-left: 10px;
+}
+.row form input{
+	margin-right: 10px;
+}
+
+.page .row.head{
+	background-color: #CCC;
+}
+
+.page .row.head p{
+	width:32%;
+	text-align: center;
+}
+
+.page .var .row.head{
+	background-color: #EEE;
+}
+
+.age,.vhead{
+	display: none;
+}
+
+.row.phead{
+	display: block;
+}
+

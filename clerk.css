@@ -1,0 +1,13 @@
+.row p, .row .p{
+	display: inline-block;
+	width: 200px;
+	text-align: center;
+}
+
+.row .s{
+	width: 100px;
+}
+
+.row .l{
+	width: 300px;
+}
