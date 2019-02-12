@@ -6,6 +6,11 @@
 <html>
 <head>
 <?php
+	if(isset($_POST[id])){
+		$_SESSION[show_id] = $_POST[id];
+		$_SESSION[clerk] = $_POST[name];
+		$_SESSION[judge] = $_POST[judge];
+	}
 	if(isset($_SESSION[show_id])){
 		try{
 			$show = get_show($_SESSION[show_id]);

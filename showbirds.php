@@ -14,6 +14,7 @@
 	<p>CLASS</p>
 	<p>BREED</p>
 	<p class="l">VARIETY</p>
+	<p>FRIZZLED</p>
 	<p class="s">AGE/SEX</p>
 	<form action="show.php?p=birds" method="POST">
 		<input id="finalize" type="submit" name="final" value="Finalize">
@@ -30,6 +31,7 @@
 	<p><?=$bird[classname]?></p>
 	<p><?=$bird[breed]?></p>
 	<p class="l"><?=$bird[variety]?></p>
+	<p><?=$bird[frizzle]? "Frizzled" : ""?></p>
 	<p class="s"><?=$bird[age]?></p>
 </div>
 <?php

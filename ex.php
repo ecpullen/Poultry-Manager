@@ -63,6 +63,7 @@
 			if(isset($_POST[ex])){
 				$ex = get_ex($show, $_POST[ex]);
 				if(isset($_POST[breed]) && $_POST[age] == ""){
+					// print_r($_POST);
 					$ids = get_ids($_POST[division],$_POST[breed],$_POST[variety]);
 					for($i = 0; $i < $_POST[cock]; $i++){
 						add_bird($show,$ex[id],$ids[breed_id],$ids[variety_id],1,$_POST[frizzle]);
@@ -108,7 +109,7 @@
 						 WF <input type="radio" name="division" value="Waterfowl">
 				Breed: <input type="text" name="breed" required>
 				Variety: <input type="text" name="variety">
-				Frizzled:<input type="checkbox" name="frizzled">
+				Frizzled:<input type="checkbox" name="frizzle" value = 'TRUE'>
 				Cock: <input class = "quantity" type="number" name="cock">
 				Hen: <input class = "quantity" type="number" name="hen">
 				Cockerel: <input class = "quantity" type="number" name="cockerel">
@@ -125,6 +126,7 @@
 	<p>CLASS</p>
 	<p>BREED</p>
 	<p class="l">VARIETY</p>
+	<p>FRIZZLE</p>
 	<p class="s">AGE/SEX</p>
 </div>
 <div class="display m">
@@ -139,9 +141,9 @@
 		<input type="text" name="breed" value="<?=$bird[breed]?>">
 		<input type="text" name="variety" value="<?=$bird[variety]?>">
 <?php
-	if($bird[frizzled]){
+	if($bird[frizzle]){
 ?>
-		<input type="checkbox" name="frizzled" checked>
+		<input type="checkbox" name="frizzle" checked>
 <?php 
 	}
 	else{
@@ -165,6 +167,7 @@
 	<p><?=$bird[classname]?></p>
 	<p><?=$bird[breed]?></p>
 	<p class="l"><?=$bird[variety]?></p>
+	<p><?=$bird[frizzle]? "Frizzled" : ""?></p>
 	<p class="s"><?=$bird[age]?></p>
 	<form class="p" action="ex.php" method="POST"><input type="hidden" name="edit" value="<?=$bird[id]?>"><input type="hidden" name="ex" value="<?=$ex[id]?>"><input type="submit" value="Edit"></form>
 	<form class="p" action="ex.php" method="POST"><input type="hidden" name="delete" value="<?=$bird[id]?>"><input type="hidden" name="ex" value="<?=$ex[id]?>"><input type="submit" value="Delete"></form>

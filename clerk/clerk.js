@@ -1,9 +1,4 @@
- // $(document).ready(function(){
- //    $(".phead").sticky({topSpacing:0});
- //    $(".vhead").sticky({topSpacing:50});
- //  });
-
- function UpdateTableHeaders() {
+function UpdateTableHeaders() {
    $(".page").each(function() {
    
        var el             = $(this),
