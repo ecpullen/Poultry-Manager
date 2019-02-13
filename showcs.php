@@ -17,7 +17,7 @@
 					$var = $bird[variety];
 					$breed = $bird[breed];
 					$q = "SELECT * from birds where breed_id = $bird[breed_id] and variety_id = $bird[variety_id]";
-					$count = db()->query($q)->rowCount();
+					$count = showdb($show)->query($q)->rowCount();
 ?>
 </div>
 <div class="page">

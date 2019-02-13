@@ -4,6 +4,15 @@
 
 	function make_dd($show, $ranks, $id, $i){
 		$places = ["BEST", "RESERVE", "THIRD", "FOURTH", "FIFTH"];
+		$exit = 1;
+		foreach($ranks as $rank){
+			if(count($rank) > 0){
+				$exit = 0;
+			}
+		}
+		if($exit){
+			return;
+		}
 		if($i < 6){
 	?>
 	<p class = "sel"><?=$places[$i-1]?></p>
@@ -47,6 +56,15 @@
 
 	function make_ddb($show, $ranks, $id, $v_ids, $i){
 		$places = ["BEST", "RESERVE", "THIRD", "FOURTH", "FIFTH"];
+		$exit = 1;
+		foreach($ranks as $rank){
+			if(count($rank) > 0){
+				$exit = 0;
+			}
+		}
+		if($exit){
+			return;
+		}
 		if($i < 6){
 	?>
 	<p><?=$places[$i-1]?></p>
@@ -87,6 +105,15 @@
 	}
 	function make_ddc($show, $ranks, $id, $v_ids, $i){
 		$places = ["BEST", "RESERVE", "THIRD", "FOURTH", "FIFTH"];
+		$exit = 1;
+		foreach($ranks as $rank){
+			if(count($rank) > 0){
+				$exit = 0;
+			}
+		}
+		if($exit){
+			return;
+		}
 		if($i < 6){
 	?>
 	<p><?=$places[$i-1]?></p>
@@ -127,6 +154,15 @@
 	}
 	function make_ddd($show, $ranks, $id, $v_ids, $i){
 		$places = ["BEST", "RESERVE", "THIRD", "FOURTH", "FIFTH"];
+		$exit = 1;
+		foreach($ranks as $rank){
+			if(count($rank) > 0){
+				$exit = 0;
+			}
+		}
+		if($exit){
+			return;
+		}
 		if($i < 6){
 	?>
 	<p><?=$places[$i-1]?></p>
@@ -167,6 +203,15 @@
 	}
 	function make_dds($show, $ranks, $id, $v_ids, $i){
 		$places = ["BEST", "RESERVE", "THIRD", "FOURTH", "FIFTH"];
+		$exit = 1;
+		foreach($ranks as $rank){
+			if(count($rank) > 0){
+				$exit = 0;
+			}
+		}
+		if($exit){
+			return;
+		}
 		if($i < 6){
 	?>
 	<p><?=$places[$i-1]?></p>
@@ -313,10 +358,10 @@
 			die("error");
 		}
 		$bird = get_bird($show,$bird_id);
-		rem_award_d($show,get_division($show,$_POST[div]));
+		rem_award_d($show,$_POST[div]);
 		for($i = 1; $i < count($_POST[ranks]); $i ++){
 			if($_POST[ranks][$i] != 0){
-				addAward($show, "D", get_division($show,$_POST[div]),$i,$_POST[ranks][$i]);
+				addAward($show, "D", $_POST[div],$i,$_POST[ranks][$i]);
 			}
 		}
 	}
@@ -367,7 +412,7 @@
 	else if($_POST[type] == "var"){
 		$show = get_show($_SESSION[show_id]);
 		$id = $_POST[id];
-		$breed_id = get_breed($show, $_POST[classes], $_POST[breed]);
+		$breed_id = $_POST[breed];
 		$variety_id = $_POST[variety];
 		$vars = get_var_ranks($show, $breed_id, $variety_id)->fetchAll();
 		$ranks = array();
@@ -423,7 +468,7 @@
 	else if($_POST[type] == "bre"){
 		$show = get_show($_SESSION[show_id]);
 		$id = $_POST[id];
-		$breed_id = get_breed($show, $_POST[classes], $_POST[breed]);
+		$breed_id = $_POST[breed];
 		$vars = get_bre_ranks($show, $breed_id)->fetchAll();
 		$v_list = get_vars($show,$breed_id)->fetchAll();
 		$ranks = array();
@@ -433,6 +478,7 @@
 			$ranks[$i] = get_ordered_var_ranks($show,$breed_id,$v_id[variety_id])->fetchAll();
 			$i ++;
 		}
+		// print_r($ranks);
 		$i = 1;
 		foreach($vars as $var){
 			if($var[place] == $i){
@@ -450,7 +496,7 @@
 	}
 	else if($_POST[type] == "cla"){
 		$show = get_show($_SESSION[show_id]);
-		$class_id = get_classs($show, $_POST[classes]);
+		$class_id = $_POST[classes];
 		$vars = get_cla_ranks($show, $class_id)->fetchAll();
 		$v_list = get_bres($show,$class_id)->fetchAll();
 		$ranks = array();
@@ -477,7 +523,7 @@
 	}
 	else if($_POST[type] == "div"){
 		$show = get_show($_SESSION[show_id]);
-		$division_id = get_division($show, $_POST[division]);
+		$division_id = $_POST[division];
 		$vars = get_div_ranks($show, $division_id)->fetchAll();
 		$v_list = get_clas($show,$division_id)->fetchAll();
 		$ranks = array();
@@ -538,29 +584,34 @@
 		$show = get_show($_SESSION[show_id]);
 		$divs = get_classes($show,$_POST[div])->fetchAll();
 		heads("class", $divs, "", "data-class = ");
-		pick("dpick", $_POST[div],"data-division = '$_POST[div]'");
+		pick("dpick", get_div($show,$_POST[div]),"data-division = '$_POST[div]'");
 	}
 	else if($_POST[type] == "breeds"){
 		$show = get_show($_SESSION[show_id]);
 		$divs = get_breeds($show,$_POST[classes])->fetchAll();
 		heads("breed", $divs, "data-class = '$_POST[classes]'", "data-breed = ");
-		pick("cpick", $_POST[classes],"data-class = '$_POST[classes]'");
+		pick("cpick", get_cla($_POST[classes]),"data-class = '$_POST[classes]'");
 	}
 	else if($_POST[type] == "varieties"){
 		$show = get_show($_SESSION[show_id]);
 		$divs = get_varieties($show,$_POST[breeds], $_POST[classes])->fetchAll();
+		for($i = 0; $i < count($divs); $i ++){
+			if($divs[$i][data] == " "){
+				$divs[$i][data] = get_bre($_POST[breeds]);
+			}
+		}
 		heads("variety", $divs, "data-class = '$_POST[classes]'' data-breed = '$_POST[breeds]'","data-variety = ");
-		pick("bpick", $_POST[breeds],"data-class = '$_POST[classes]' data-breed = '$_POST[breeds]'");
+		pick("bpick", get_bre($_POST[breeds]),"data-class = '$_POST[classes]' data-breed = '$_POST[breeds]'");
 	}
 	else if($_POST[type] == "ages"){
 		$show = get_show($_SESSION[show_id]);
-		$divs = get_ages($show,$_POST[varieties], $_POST[breeds], $_POST[classes])->fetchAll();
+		$divs = get_ages($show,$_POST[varieties], $_POST[breeds])->fetchAll();
 		heads("age", $divs, "data-class = '$_POST[classes]' data-breed = '$_POST[breeds]' data-variety= '$_POST[varieties]'", "data-age = ");
 		pick("vpick", conv_variety($_POST[varieties]),"data-class = '$_POST[classes]' data-breed = '$_POST[breeds]' data-variety= '$_POST[varieties]'");
 	}
 	else if($_POST[type] == "ranks"){
 		$show = get_show($_SESSION[show_id]);
-		$birds = get_birds_rev($show,$_POST[classes],$_POST[breeds],$_POST[varieties],$_POST[ages])->fetchAll();
+		$birds = get_birds_rev($show,$_POST[breeds],$_POST[varieties],$_POST[ages])->fetchAll();
 		$bird = $birds[0];
 		$ranksPDO = get_ranks($show,$bird);
 		$ranks = array();

@@ -64,6 +64,17 @@
 				$ex = get_ex($show, $_POST[ex]);
 				if(isset($_POST[breed]) && $_POST[age] == ""){
 					$ids = get_ids($_POST[division],$_POST[breed],$_POST[variety]);
+					if(!isset($ids[class_id])){
+						$ids = get_breed_with_div($show,$_POST[division],$_POST[breed]);
+						if(!isset($ids[class_id])){
+							echo "adding breed";
+							$ids = add_breed($show, get_division($show,$_POST[division]), $_POST[breed]);
+						}
+						$ids[variety_id] = get_variety($show,$_POST[variety]);
+						if(!$ids[variety_id]){
+							$ids[variety_id] = add_variety($show,$_POST[variety]);
+						}
+					}
 					for($i = 0; $i < $_POST[cock]; $i++){
 						add_bird($show,$ex[id],$ids[breed_id],$ids[variety_id],1,$_POST[frizzle]);
 					}
@@ -131,6 +142,9 @@
 <div class="display m">
 <?php
 				foreach ($birds as $bird) {
+					if($bird[classname] == ""){
+						$bird[classname] = class_by_breed($show,$bird[breed_id]);
+					}
 					if($bird[id] == $_POST[edit]){
 ?>
 <div class="row">

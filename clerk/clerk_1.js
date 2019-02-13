@@ -18,6 +18,7 @@ $(function(){
 })
 
 function dodivision(){
+	$(".division p").unbind();
 	$(".division p").click(function(){
 		console.log($(this).siblings().length);
 		if($(this).siblings().length){
@@ -42,6 +43,7 @@ function dodivision(){
 				console.log(error)
 		}});
 	})
+	$(".spick p").unbind();
 	$(".spick p").click(function(){
 		t = $(this)[0]
 		console.log($(this).children())
@@ -55,6 +57,7 @@ function dodivision(){
 }
 
 function doclass(){
+	$(".class p").unbind();
 	$(".class p").click(function(){
 		console.log($(this).siblings().length);
 		if($(this).siblings().length){
@@ -79,6 +82,7 @@ function doclass(){
 				console.log(error)
 		}});
 	})
+	$(".dpick p").unbind()
 	$(".dpick p").click(function(){
 		t = $(this)[0]
 		console.log($(this).children())
@@ -92,6 +96,7 @@ function doclass(){
 }
 
 function dobreed(){
+	$(".breed p").unbind()
 	$(".breed p").click(function(){
 		console.log($(this).siblings().length);
 		if($(this).siblings().length){
@@ -116,6 +121,7 @@ function dobreed(){
 				console.log(error)
 		}});
 	})
+	$(".cpick p").unbind()
 	$(".cpick p").click(function(){
 		t = $(this)[0]
 		console.log($(this).children())
@@ -129,6 +135,7 @@ function dobreed(){
 }
 
 function dovariety(){
+	$(".variety p").unbind();
 	$(".variety p").click(function(){
 		console.log($(this).siblings().length);
 		if($(this).siblings().length){
@@ -153,6 +160,7 @@ function dovariety(){
 				console.log(error)
 		}});
 	})
+	$(".bpick p").unbind()
 	$(".bpick p").click(function(){
 		t = $(this)[0]
 		console.log($(this).children())
@@ -165,6 +173,7 @@ function dovariety(){
 	})
 }
 function doage(){
+	$(".age p").unbind()
 	$(".age p").click(function(){
 		console.log($(this).siblings().length);
 		if($(this).siblings().length){
@@ -189,6 +198,7 @@ function doage(){
 				console.log(error)
 		}});
 	})
+	$(".vpick p").unbind()
 	$(".vpick p").click(function(){
 		t = $(this)[0]
 		console.log($(this).children())
@@ -280,6 +290,7 @@ function listenerv(t){
 						method:"POST",
 						dataType:"text",
 						success:function(result){
+							console.log(result);
 							listenerv(t);	
 						},
 						error: function(error){
