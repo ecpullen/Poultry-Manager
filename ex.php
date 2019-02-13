@@ -63,7 +63,6 @@
 			if(isset($_POST[ex])){
 				$ex = get_ex($show, $_POST[ex]);
 				if(isset($_POST[breed]) && $_POST[age] == ""){
-					// print_r($_POST);
 					$ids = get_ids($_POST[division],$_POST[breed],$_POST[variety]);
 					for($i = 0; $i < $_POST[cock]; $i++){
 						add_bird($show,$ex[id],$ids[breed_id],$ids[variety_id],1,$_POST[frizzle]);

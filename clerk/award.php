@@ -212,7 +212,7 @@
 		foreach($names as $name){
 ?>
 <div class="row <?=$cla?>">
-	<p <?=$data?> <?=$cdata.db()->quote($name[data])?>><?=strtoupper($name[data])?></p>
+	<p <?=$data?> <?=$cdata.db()->quote(isset($name[var_id])?$name[var_id]:$name[data])?>><?=strtoupper($name[data])?></p>
 </div>		
 <?php
 		}
@@ -259,10 +259,10 @@
 			die("error");
 		}
 		$bird = get_bird($show,$bird_id);
-		rem_award_v($show,$bird[breed_id],$bird[variety_id]);
+		rem_award_v($show,$bird[breed_id],$bird[variety_id]*2 + $bird[frizzle]);
 		for($i = 1; $i < count($_POST[ranks]); $i ++){
 			if($_POST[ranks][$i] != 0){
-				addAward($show, "V", $bird[variety_id],$i,$_POST[ranks][$i]);
+				addAward($show, "V", $bird[variety_id]*2 + $bird[frizzle],$i,$_POST[ranks][$i]);
 			}
 		}
 	}
@@ -368,7 +368,7 @@
 		$show = get_show($_SESSION[show_id]);
 		$id = $_POST[id];
 		$breed_id = get_breed($show, $_POST[classes], $_POST[breed]);
-		$variety_id = get_variety($show, $_POST[variety]);
+		$variety_id = $_POST[variety];
 		$vars = get_var_ranks($show, $breed_id, $variety_id)->fetchAll();
 		$ranks = array();
 		for($i = 1; $i < 5; $i ++){
@@ -556,11 +556,11 @@
 		$show = get_show($_SESSION[show_id]);
 		$divs = get_ages($show,$_POST[varieties], $_POST[breeds], $_POST[classes])->fetchAll();
 		heads("age", $divs, "data-class = '$_POST[classes]' data-breed = '$_POST[breeds]' data-variety= '$_POST[varieties]'", "data-age = ");
-		pick("vpick", $_POST[varieties],"data-class = '$_POST[classes]' data-breed = '$_POST[breeds]' data-variety= '$_POST[varieties]'");
+		pick("vpick", conv_variety($_POST[varieties]),"data-class = '$_POST[classes]' data-breed = '$_POST[breeds]' data-variety= '$_POST[varieties]'");
 	}
 	else if($_POST[type] == "ranks"){
 		$show = get_show($_SESSION[show_id]);
-		$birds = get_birds($show,$_POST[classes],$_POST[breeds],$_POST[varieties],$_POST[ages])->fetchAll();
+		$birds = get_birds_rev($show,$_POST[classes],$_POST[breeds],$_POST[varieties],$_POST[ages])->fetchAll();
 		$bird = $birds[0];
 		$ranksPDO = get_ranks($show,$bird);
 		$ranks = array();

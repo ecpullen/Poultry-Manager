@@ -49,7 +49,7 @@ function get_bird($show, $id){
 }
 function get_bird_str($show, $id){
 	$bird = get_bird($show, $id);
-	return "$bird[variety] $bird[breed] $bird[age]";
+	return "$bird[variety]".($bird[frizzle]?" Frizzled ":" ")."$bird[breed] $bird[age]";
 }
 function get_divisions($show){
 	return showdb($show)->query("SELECT DISTINCT division as data from divisions");
@@ -70,19 +70,32 @@ function get_breed($show,$cla, $breed){
 	return showdb($show)->query("SELECT DISTINCT birds.breed_id FROM birds JOIN cbv on birds.breed_id = cbv.breed_id and birds.variety_id = cbv.variety_id join classes on classes.id = cbv.class_id join breeds on breeds.id = cbv.breed_id where classname like '$cla' and breed like '$breed'")->fetch()[breed_id];
 }
 function get_varieties($show,$bre, $cla){
-	return showdb($show)->query("SELECT DISTINCT variety as data FROM birds JOIN cbv on birds.breed_id = cbv.breed_id and birds.variety_id = cbv.variety_id join varieties on varieties.id = cbv.variety_id join breeds on breeds.id = cbv.breed_id join classes on classes.id = cbv.class_id where breed like '$bre' and classname like '$cla' ORDER BY variety");
+	return showdb($show)->query("SELECT DISTINCT concat(variety,' ',(case when frizzle = 0 then ''
+             when frizzle = 1 then ' Frizzle' end)) as data, (birds.variety_id*2 + frizzle) as var_id FROM birds JOIN cbv on birds.breed_id = cbv.breed_id and birds.variety_id = cbv.variety_id join varieties on varieties.id = cbv.variety_id join breeds on breeds.id = cbv.breed_id join classes on classes.id = cbv.class_id where breed like '$bre' and classname like '$cla' ORDER BY data");
 }
 function get_variety($show,$variety){
 	return showdb($show)->query("SELECT DISTINCT id from varieties where variety like '$variety'")->fetch()[id];
 }
+function conv_variety($variety_id){
+	$fri = $variety_id%2;
+	$var = ($variety_id-$fri)/2;
+	return db()->query("SELECT variety from varieties where id = $var")->fetch()[variety].($fri?" frizzle":"");
+}
 function get_ages($show,$var, $bre, $cla){
-	return showdb($show)->query("SELECT DISTINCT age as data, age_id FROM birds JOIN cbv on birds.breed_id = cbv.breed_id and birds.variety_id = cbv.variety_id join varieties on varieties.id = cbv.variety_id join breeds on breeds.id = cbv.breed_id join classes on classes.id = cbv.class_id join ages on ages.id = birds.age_id where breed like '$bre' and classname like '$cla' and variety like '$var' ORDER BY age_id");
+	$fri = $var%2;
+	$var = ($var-$fri)/2;
+	return showdb($show)->query("SELECT DISTINCT age as data, age_id FROM birds JOIN cbv on birds.breed_id = cbv.breed_id and birds.variety_id = cbv.variety_id join varieties on varieties.id = cbv.variety_id join breeds on breeds.id = cbv.breed_id join classes on classes.id = cbv.class_id join ages on ages.id = birds.age_id where breed like '$bre' and classname like '$cla' and birds.variety_id = $var and frizzle = $fri ORDER BY age_id");
 }
 function get_birds($show,$class,$breed,$var,$age){
 	return showdb($show)->query("SELECT birds.id,classname,breed,variety,age,age_id,ex_id,birds.breed_id,birds.variety_id,frizzle FROM birds JOIN cbv on birds.breed_id = cbv.breed_id and birds.variety_id = cbv.variety_id JOIN varieties on cbv.variety_id = varieties.id join breeds on cbv.breed_id = breeds.id join classes on cbv.class_id = classes.id join ages on birds.age_id = ages.id where classname like '$class' and breed like '$breed' and variety like '$var' and age like '$age' ORDER BY birds.id");
 }
+function get_birds_rev($show,$class,$breed,$var,$age){
+	$fri = $var%2;
+	$var = ($var-$fri)/2;
+	return showdb($show)->query("SELECT birds.id,classname,breed,variety,age,age_id,ex_id,birds.breed_id,birds.variety_id,frizzle FROM birds JOIN cbv on birds.breed_id = cbv.breed_id and birds.variety_id = cbv.variety_id JOIN varieties on cbv.variety_id = varieties.id join breeds on cbv.breed_id = breeds.id join classes on cbv.class_id = classes.id join ages on birds.age_id = ages.id where classname like '$class' and breed like '$breed' and varieties.id = $var and frizzle = $fri and age like '$age' ORDER BY birds.id");
+}
 function get_vars($show,$breed_id){
-	return showdb($show)->query("SELECT DISTINCT birds.variety_id, variety FROM birds JOIN cbv on birds.breed_id = cbv.breed_id join varieties on birds.variety_id = varieties.id where birds.breed_id = $breed_id ORDER BY variety");
+	return showdb($show)->query("SELECT DISTINCT (birds.variety_id*2 + frizzle) as variety_id, variety FROM birds JOIN cbv on birds.breed_id = cbv.breed_id join varieties on birds.variety_id = varieties.id where birds.breed_id = $breed_id ORDER BY variety");
 }
 function get_bres($show,$class_id){
 	return showdb($show)->query("SELECT DISTINCT birds.breed_id, breed FROM birds JOIN cbv on birds.breed_id = cbv.breed_id and birds.variety_id = cbv.variety_id join breeds on birds.breed_id = breeds.id where cbv.class_id = $class_id ORDER BY breed");
@@ -183,10 +196,12 @@ function get_rank($show, $bird_id){
 	}
 }
 function get_ranks($show, $bird){	
-	return showdb($show)->query("SELECT bird_id, place from awards join birds on birds.id = bird_id where breed_id = $bird[breed_id] and variety_id = $bird[variety_id] and age_id = $bird[age_id] and type='R' order by place");
+	return showdb($show)->query("SELECT bird_id, place from awards join birds on birds.id = bird_id where breed_id = $bird[breed_id] and variety_id = $bird[variety_id] and age_id = $bird[age_id] and frizzle = $bird[frizzle] and type='R' order by place");
 }
 function get_var_ranks($show, $breed_id, $variety_id){
-	return showdb($show)->query("SELECT bird_id, place, age_id from awards join birds on birds.id = bird_id where breed_id = $breed_id and variety_id = $variety_id and type='V' order by place");
+	$fri = $variety_id%2;
+	$variety_id = ($variety_id-$fri)/2;
+	return showdb($show)->query("SELECT bird_id, place, age_id from awards join birds on birds.id = bird_id where breed_id = $breed_id and variety_id = $variety_id and frizzle = $fri and type='V' order by place");
 }
 function get_bre_ranks($show, $breed_id){
 	return showdb($show)->query("SELECT bird_id, place, age_id from awards join birds on birds.id = bird_id where breed_id = $breed_id and type='B' order by place");
@@ -201,7 +216,9 @@ function get_sho_ranks($show){
 	return showdb($show)->query("SELECT bird_id, place, age_id from awards join birds on birds.id = bird_id where type='S' order by place");
 }
 function rem_award_r($show, $breed_id, $variety_id, $age_id){
-	showdb($show)->query("DELETE awards FROM awards inner join birds on birds.id = awards.bird_id where breed_id = $breed_id and variety_id = $variety_id and age_id = $age_id");
+	$fri = $variety_id%2;
+	$variety_id = ($variety_id-$fri)/2;
+	showdb($show)->query("DELETE awards FROM awards inner join birds on birds.id = awards.bird_id where breed_id = $breed_id and variety_id = $variety_id and age_id = $age_id and frizzle = $fri");
 }
 function rem_award_v($show, $breed_id, $variety_id){
 	showdb($show)->query("DELETE awards FROM awards inner join birds on birds.id = awards.bird_id where breed_id = $breed_id and variety_id = $variety_id and type ='V'");
@@ -219,7 +236,9 @@ function rem_award_s($show){
 	showdb($show)->query("DELETE awards FROM awards where type ='S'");
 }
 function get_ordered_age_ranks($show, $breed_id, $variety_id, $age){
-	return showdb($show)->query("SELECT bird_id, place from awards join birds on birds.id = bird_id where breed_id = $breed_id and variety_id = $variety_id and age_id = $age and type='R' order by place");
+	$fri = $variety_id%2;
+	$variety_id = ($variety_id-$fri)/2;
+	return showdb($show)->query("SELECT bird_id, place from awards join birds on birds.id = bird_id where breed_id = $breed_id and variety_id = $variety_id and age_id = $age and frizzle = $fri and type='R' order by place");
 }
 function get_ordered_var_ranks($show, $breed_id, $var){
 	return showdb($show)->query("SELECT bird_id, place from awards join birds on birds.id = bird_id where breed_id = $breed_id and number = $var and type='V' order by place");
