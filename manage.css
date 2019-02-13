@@ -101,7 +101,7 @@ header .mainlink:hover{
 	width: 400px;
 	height: 600px;
 	border: 1px solid black;
-	display: inline-block;
+	display: inline-grid;
 	text-align: center;
 }
 

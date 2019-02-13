@@ -22,7 +22,7 @@
 	<p class="name"><?=$show[name]?></p>
 	<p class="class"><?=$bird[classname]?></p>
 	<p class="breed"><?=$bird[breed]?></p>
-	<p class="variety"><?=$bird[variety]?></p>
+	<p class="variety"><?=$bird[variety].($bird[NR]?" NRB":"")?></p>
 	<p class="id"><?=$bird[id]?></p>
 	<p class="ex">Exhibitor: <?=$bird[ex_id]?></p>
 </div>

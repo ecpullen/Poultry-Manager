@@ -24,7 +24,7 @@
 	<div class="row head">
 		<p><?=$bird[classname]?></p>
 		<p><?=$bird[breed]?></p>
-		<p class="l"><?=$bird[variety]?></p>
+		<p class="l"><?=$bird[variety].($bird[NR]?" NRB":"")?></p>
 		<p><?=$count?> entries</p>
 	</div>
 	<div class="row">

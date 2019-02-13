@@ -70,10 +70,7 @@
 							echo "adding breed";
 							$ids = add_breed($show, get_division($show,$_POST[division]), $_POST[breed]);
 						}
-						$ids[variety_id] = get_variety($show,$_POST[variety]);
-						if(!$ids[variety_id]){
-							$ids[variety_id] = add_variety($show,$_POST[variety]);
-						}
+						$ids[variety_id] = add_variety_link($show,$ids,$_POST[variety]);
 					}
 					for($i = 0; $i < $_POST[cock]; $i++){
 						add_bird($show,$ex[id],$ids[breed_id],$ids[variety_id],1,$_POST[frizzle]);

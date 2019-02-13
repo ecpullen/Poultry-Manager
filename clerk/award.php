@@ -106,6 +106,9 @@
 	function make_ddc($show, $ranks, $id, $v_ids, $i){
 		$places = ["BEST", "RESERVE", "THIRD", "FOURTH", "FIFTH"];
 		$exit = 1;
+		if(count($ranks)==0){
+			return;
+		}
 		foreach($ranks as $rank){
 			if(count($rank) > 0){
 				$exit = 0;
@@ -597,11 +600,11 @@
 		$divs = get_varieties($show,$_POST[breeds], $_POST[classes])->fetchAll();
 		for($i = 0; $i < count($divs); $i ++){
 			if($divs[$i][data] == " "){
-				$divs[$i][data] = get_bre($_POST[breeds]);
+				$divs[$i][data] = get_bre($show,$_POST[breeds]);
 			}
 		}
 		heads("variety", $divs, "data-class = '$_POST[classes]'' data-breed = '$_POST[breeds]'","data-variety = ");
-		pick("bpick", get_bre($_POST[breeds]),"data-class = '$_POST[classes]' data-breed = '$_POST[breeds]'");
+		pick("bpick", get_bre($show,$_POST[breeds]),"data-class = '$_POST[classes]' data-breed = '$_POST[breeds]'");
 	}
 	else if($_POST[type] == "ages"){
 		$show = get_show($_SESSION[show_id]);
