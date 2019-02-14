@@ -20,6 +20,10 @@ $(document).ready(function(){
 		console.log("here")
 		window.location.href = "show.php?p=ct";
 	})
+	$("#aw").click(function(){
+		console.log("here")
+		window.location.href = "show.php?p=aw";
+	})
 	$("#lo").click(function(){
 		console.log("here")
 		$.ajax("logout.php");

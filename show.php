@@ -79,6 +79,9 @@
 			case 'ct':
 				require("showct.php");
 				break;
+			case 'aw':
+				require("showaward.php");
+				break;
 			default:
 				require("showhome.php");
 				break;
