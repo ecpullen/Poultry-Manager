@@ -1,5 +1,5 @@
 html{
-	width: 600px;
+	width: 100%;
 }
 
 p{
@@ -15,7 +15,7 @@ p{
 
 .row p{
 	display: inline-block;
-	width: 200px;
+	width: 100%;
 	text-align: center;
 }
 

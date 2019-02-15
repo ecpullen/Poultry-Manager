@@ -10,11 +10,10 @@
 </head>
 <body>
 <?php 
+	include 'mysql.php';
 	if(isset($_POST["username"])){
 		try{
-			$db = new PDO("mysql:dbname=info;host=127.0.0.1",
-				"root",
-				"admin123");
+			$db = db();
 			$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 			$query = "select * from users where password = ".$db->quote($_POST["password"])." and username = ".$db->quote($_POST["username"]).";";
 			//echo $query;
@@ -32,9 +31,7 @@
 	}
 	elseif(isset($_SESSION["username"])){
 		try{
-			$db = new PDO("mysql:dbname=info;host=127.0.0.1",
-				"root",
-				"admin123");
+			$db = db();
 			$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 			$query = "select * from users where password = ".$db->quote($_SESSION["password"])." and username = ".$db->quote($_SESSION["username"]).";";
 			//echo $query;
@@ -58,7 +55,9 @@
 <?php 
 		try{
 			$shows = $db->query("select * from shows where admin_id=$user[id];");
-		}catch(PDOException $e){}
+		}catch(PDOException $e){
+			echo $e;
+		}
 		foreach($shows as $show){
 ?>
 	<form action="show.php" method="post">

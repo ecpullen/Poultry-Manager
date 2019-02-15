@@ -8,12 +8,49 @@
 </head>
 <body>
 <header>
-	<button onclick="$('#login').show()">Sign In</button>
+	<div id="home" class="mainlink">
+		<h3>Poultry Manager</h3>
+	</div>
+	<div id="services" class="mainlink">
+		<h3>Services</h3>
+	</div>
+	<div id="clerklogin" class="mainlink">
+		<h3>Clerk Login</h3>
+	</div>
+	<div id="exlogin" class="mainlink">
+		<h3>Exhibitor Login</h3>
+	</div>
+	<div id="seclogin" class="mainlink">
+		<h3>Secretary Login</h3>
+	</div>
+	<div id="sup" class="mainlink">
+		<h3>Sign Up</h3>
+	</div>
 
 </header>
-	<div id="login">
+	<div class="slider">
+		<div class="slide">
+			<img src="images/exhibitors.png">
+		</div>
+		<div class="slide">
+			<img src="images/birds.png">
+		</div>
+		<div class="slide">
+			<img src="images/clerksheet.png">
+		</div>
+		<div class="slide">
+			<img src="images/clerksheetprint.png">
+		</div>
+		<div class="slide">
+			<img src="images/cooptagprint.png">
+		</div>
+		<div class="slide">
+			<img src="images/awards.png">
+		</div>
+	</div>
+	<div id="login" class="login popup">
 		<fieldset>
-			<legend>Sign In</legend>
+			<legend>Secretary Sign In</legend>
 			<form action="main.php" method="POST">
 				Username:<br />
 				<input type="text" name="username" required>
@@ -22,11 +59,29 @@
 				<input type="password" name="password" required>
 				<br />
 				<input type="submit" name="submit">
+				<input class="exit" type="button" name="cancel" value = "Cancel">
 			</form>
 		</fieldset>
-		<button onclick="$('#login').hide();$('#signup').show()">Sign Up</button>
 	</div>
-	<div id="signup">
+	<div id="clogin" class="login popup">
+		<fieldset>
+			<legend>Clerk Sign In</legend>
+			<form action="clerk/clerk.php" method="POST">
+				Name:<br />
+				<input type="text" name="name" required>
+				<br />
+				Judge:<br />
+				<input type="text" name="judge" required>
+				<br />
+				Show Id:<br />
+				<input type="text" name="id" required>
+				<br />
+				<input type="submit" name="submit">
+				<input class="exit" type="button" name="cancel" value = "Cancel">
+			</form>
+		</fieldset>
+	</div>
+	<div id="signup" class="popup">
 		<fieldset>
 			<legend>Sign Up</legend>
 			<form id="signupform" action="signup.php" method="POST">
@@ -42,9 +97,42 @@
 				Confirm Password:<br />
 				<input type="password" name="sconfirmpassword" required>
 				<br />
+				Role:<br />
+				<select name="role" required>
+					<option disabled selected></option>
+					<option value="manager">Secretary</option>
+					<option value="user">User</option>
+				</select>
+				<br>
 				<input type="submit" name="submit">
+				<input class="exit" type="button" name="cancel" value = "Cancel">
 			</form>
 		</fieldset>
+	</div>
+	<div class="popup" id="spop">
+		<h2>Poultry Manager offers show secretaries an effecient way of organizing club shows.</h2>
+		<div id="servicedisplay">
+			<div class="service">
+				<img src="images/exhibitors.png">
+				<p>Exhibitors are displayed in a easily manipulated chart.</p>
+			</div>
+			<div class="service">
+				<img src="images/editex.png">
+				<p>Exhibitors entries are editable on the fly.</p>
+			</div>
+			<div class="service">
+				<img src="images/birds.png">
+				<p>All birds can be seen from the birds tab.</p>
+			</div>
+			<div class="service">
+				<img src="images/clerksheet.png">
+				<p>Digital clerk sheets are viewable from the clerk sheets tab.</p>
+			</div>
+			<div class="service">
+				<img src="images/clerksheetprint.png">
+				<p>Printable clerk sheets are also created through the clerk sheets tab.</p>
+			</div>
+		</div>
 	</div>
 </body>
 </html>

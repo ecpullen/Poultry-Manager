@@ -67,6 +67,7 @@ if(isset($_SESSION["username"])&&isset($_POST["show_name"])){
 		$showdb->exec("CREATE TABLE cbv LIKE info.cbv;
 						INSERT INTO cbv  
     					SELECT * FROM info.cbv;");
+		$showdb->exec("CREATE TABLE sawards LIKE info.sawards;");
 
 		echo "sucessfully created $_POST[show_name]";
 	}

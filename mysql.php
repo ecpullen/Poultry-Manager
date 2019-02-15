@@ -18,6 +18,9 @@ function get_bre($show,$breed_id){
 function get_cla($class_id){
 	return db()->query("SELECT * FROM classes where id = $class_id")->fetch()[classname];
 }
+function get_all_cla(){
+	return db()->query("SELECT * from classes");
+}
 function validate($uname, $pword){
 
 	return db()->query("select * from users where password = ".db()->quote($pword)." and username = ".db()->quote($uname).";")->rowCount() != 0;
@@ -64,7 +67,7 @@ function get_classes($show,$div){
 	return showdb($show)->query("SELECT DISTINCT classes.classname as data, classes.id, classes.id as var_id FROM birds JOIN cbv on birds.breed_id = cbv.breed_id and birds.variety_id = cbv.variety_id join classes on classes.id = cbv.class_id join divisions on divisions.class_id = cbv.class_id where divisions.id = $div ORDER BY classes.id");
 }
 function get_classs($show,$cla){
-	return showdb($show)->query("SELECT DISTINCT id from classes where id = $cla")->fetch()[id];
+	return showdb($show)->query("SELECT DISTINCT id from classes where classname like '$cla'")->fetch()[id];
 }
 function get_breeds($show,$cla){
 	return showdb($show)->query("SELECT DISTINCT breed as data, breeds.id as var_id FROM birds JOIN cbv on birds.breed_id = cbv.breed_id and birds.variety_id = cbv.variety_id join classes on classes.id = cbv.class_id join breeds on breeds.id = cbv.breed_id where classes.id = $cla ORDER BY breed");
@@ -290,6 +293,69 @@ function get_ordered_div_ranks($show, $var){
 }
 function rem_rank($show, $id){
 	showdb($show)->query("DELETE FROM awards WHERE bird_id = $id");
+}
+function add_saward_s($show,$place){
+	showdb($show)->query("INSERT INTO sawards (type, place) values ('S',$place)");
+}
+function add_saward_d($show,$place, $div){
+	$division_id = get_division($show,$div);
+	showdb($show)->query("INSERT INTO sawards (type, place, division_id) values ('D',$place,$division_id)");
+}
+function add_saward_c($show,$place, $cla){
+	$class_id = get_classs($show, $cla);
+	showdb($show)->query("INSERT INTO sawards (type, place, class_id) values ('C',$place,$class_id)");
+}
+function add_saward_b($show,$place, $div, $bre){
+	$division_id = get_division($show,$div);
+	$breed_id = get_breed_with_div($show, $div,$bre)[breed_id];
+	showdb($show)->query("INSERT INTO sawards (type, place, division_id, breed_id) values ('B',$place,$division_id,$breed_id)");
+}
+function add_saward_v($show,$place, $div, $bre, $var, $fri){
+	$division_id = get_division($show,$div);
+	$breed_id = get_breed_with_div($show, $div, $bre)[breed_id];
+	if(!$breed_id){
+		$breed_id = add_breed($show, $division_id, $bre);
+	}
+	$variety_id = get_variety($show, $var);
+	if(!$variety_id){
+		$variety_id = add_variety($show, $var);
+	}
+	$variety_id = 2*$variety_id + $fri;
+	showdb($show)->query("INSERT INTO sawards (type, place, division_id, breed_id, variety_id) values ('V',$place,$division_id, $breed_id, $variety_id)");
+}
+function add_saward_r($show,$place, $div, $bre, $var, $fri, $age){
+	$division_id = get_division($show,$div);
+	$breed_id = get_breed_with_div($show, $div, $bre)[breed_id];
+	if(!$breed_id){
+		$breed_id = add_breed($show, $division_id, $bre)[breed_id];
+	}
+	$variety_id = get_variety($show, $var);
+	if(!$variety_id){
+		$variety_id = add_variety($show, $var);
+	}
+	$variety_id = 2*$variety_id + $fri;
+	showdb($show)->query("INSERT INTO sawards (type, place, division_id, breed_id, variety_id, age_id) values ('R',$place,$division_id, $breed_id, $variety_id, $age)");
+}
+function get_saward_s($show){
+	return showdb($show)->query("SELECT DISTINCT sawards.place, breed as rbre, variety as rvar, age as rage, name, frizzle as rfri, sawards.type, ' IN SHOW' as ssho FROM sawards LEFT JOIN awards on sawards.type = awards.type and sawards.place = awards.place left join birds on birds.id = awards.bird_id left join breeds on breeds.id = birds.breed_id left join varieties on varieties.id = birds.variety_id left join ages on ages.id = birds.age_id left join exhibitors on birds.ex_id = exhibitors.id where sawards.type = 'S';")->fetchAll();
+}
+function get_saward_d($show){
+	return showdb($show)->query("SELECT DISTINCT sawards.place, breed as rbre, variety as rvar, age as rage, name, frizzle as rfri, sawards.type ,division as sdiv FROM sawards join divisions on divisions.id = sawards.division_id LEFT JOIN awards on sawards.type = awards.type and sawards.place = awards.place and number = divisions.id left join birds on birds.id = awards.bird_id left join breeds on breeds.id = birds.breed_id left join varieties on varieties.id = birds.variety_id left join ages on ages.id = birds.age_id left join exhibitors on birds.ex_id = exhibitors.id where sawards.type = 'D';")->fetchAll();
+}
+function get_saward_c($show){
+	return showdb($show)->query("SELECT DISTINCT sawards.place, breed as rbre, variety as rvar, age as rage, name, frizzle as rfri, sawards.type, classname as scla, classes.id  FROM sawards join classes on sawards.class_id = classes.id LEFT JOIN awards on sawards.type = awards.type and sawards.place = awards.place and number = classes.id left join birds on birds.id = awards.bird_id left join breeds on breeds.id = birds.breed_id left join varieties on varieties.id = birds.variety_id left join ages on ages.id = birds.age_id left join exhibitors on birds.ex_id = exhibitors.id where sawards.type = 'C' order by classes.id;")->fetchAll();
+}
+function get_saward_b($show){
+	return showdb($show)->query("SELECT DISTINCT sawards.place, b.breed as rbre, breeds.breed as sbre, variety as rvar, age as rage, name, frizzle as rfri, sawards.type, division as sdiv, d.class_id FROM sawards join (select min(class_id) as class_id, breed_id, min(variety_id) as variety_id from cbv group by breed_id) as cbv on cbv.breed_id = sawards.breed_id join (SELECT min(id) as id, min(division) as division, class_id from divisions group by class_id) as d on d.class_id = cbv.class_id LEFT JOIN awards on sawards.type = awards.type and sawards.place = awards.place and number = sawards.breed_id left join birds on birds.id = awards.bird_id join breeds on breeds.id = sawards.breed_id left join breeds b on b.id = birds.breed_id left join varieties on varieties.id = birds.variety_id left join ages on ages.id = birds.age_id left join exhibitors on birds.ex_id = exhibitors.id where sawards.type = 'B' order by d.class_id, b.breed;")->fetchAll();
+}
+function get_saward_v($show){
+	return showdb($show)->query("SELECT DISTINCT sawards.place, breeds.breed, breeds.breed as sbre, b.breed as rbre, varieties.variety, varieties.variety as svar, v.variety as rvar, age, name, sawards.variety_id MOD 2 as frizzle, frizzle as sfri, sawards.type,sawards.breed_id, classname, division as sdiv FROM sawards join cbv on cbv.breed_id = sawards.breed_id and cbv.variety_id = sawards.variety_id DIV 2 join classes on classes.id = cbv.class_id join (SELECT min(id) as id, min(division) as division, class_id from divisions group by class_id) as d on d.class_id = cbv.class_id LEFT JOIN awards on sawards.type = awards.type and sawards.place = awards.place and number = sawards.variety_id left join birds on birds.id = awards.bird_id and birds.breed_id = sawards.breed_id join breeds on breeds.id = sawards.breed_id left join varieties on sawards.variety_id DIV 2=varieties.id left join ages on ages.id = birds.age_id left join breeds b on b.id = birds.breed_id left join varieties v on v.id = birds.variety_id left join exhibitors on birds.ex_id = exhibitors.id where sawards.type = 'V';")->fetchAll();
+}
+function get_saward_r($show){
+	return showdb($show)->query("SELECT DISTINCT sawards.place, breed, breed as sbre, variety, variety as svar, age, age as sage, name, sawards.variety_id MOD 2 as frizzle, sawards.variety_id MOD 2 as sfri, sawards.type,sawards.breed_id, a.id, classname,rbre,rvar,rage FROM sawards JOIN breeds on sawards.breed_id = breeds.id JOIN varieties ON varieties.id = sawards.variety_id DIV 2 join cbv on cbv.breed_id = sawards.breed_id and cbv.variety_id = sawards.variety_id DIV 2 join classes on cbv.class_id = classes.id join ages on ages.id = sawards.age_id LEFT JOIN (SELECT birds.breed_id as breed_id, birds.variety_id as variety_id, name, awards.type as type, awards.number as number, birds.id as id, frizzle, place, b.breed as rbre, v.variety as rvar, a.age as rage FROM awards join birds on birds.id = awards.bird_id join breeds b on b.id = birds.breed_id join varieties v on v.id = birds.variety_id join ages a on a.id = birds.age_id join exhibitors on birds.ex_id = exhibitors.id where type = 'R') as a on a.breed_id = sawards.breed_id and a.variety_id = sawards.variety_id DIV 2 and frizzle = sawards.variety_id MOD 2 and a.number = sawards.age_id and a.place = sawards.place where sawards.type = 'R';")->fetchAll();
+}
+function get_sawards($show){
+	return array_merge(get_saward_s($show),get_saward_d($show),get_saward_c($show),get_saward_b($show),get_saward_v($show),get_saward_r($show));
 }
 ?>
 

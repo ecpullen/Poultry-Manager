@@ -83,6 +83,10 @@ header .mainlink:hover{
 	width: 300px;
 }
 
+.row .half{
+	width: 45%;
+}
+
 .row form input{
 	display: inline-block;
 	width: 194px;
@@ -118,6 +122,22 @@ header .mainlink:hover{
 	background-color: white;
 	color: black;
 	text-align: center;
+}
+
+#new div{
+	display: inline;
+}
+
+.slider {
+  width: 600px;
+  height: 300px;
+  display: flex;
+  overflow-x: auto;
+}
+.slide {
+  width: 600px;
+  flex-shrink: 0;
+  height: 100%;
 }
 
 @media print {
