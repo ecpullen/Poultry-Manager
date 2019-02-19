@@ -127,3 +127,11 @@ header .mainlink:hover{
 	height: 100%;
 }
 
+.bad{
+	background-color: #F99;
+}
+
+.good{
+	background-color: #9F9;
+}
+
