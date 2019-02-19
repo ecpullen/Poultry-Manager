@@ -1,67 +1,36 @@
 <?php 
 	session_start();
 	include 'mysql.php';
-?>
-<!DOCTYPE html>
-<html>
-<head>
-	<title>Exhibitor</title>
-	<link rel="stylesheet" type="text/css" href="manage.css">
-	<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-	<script src="manager.js"></script>
-</head>
-<body>
-<?php
 	if(isset($_SESSION["username"])&&$_SESSION["show_id"]){
+
 		try{
 			$arr = val_and_showdb($_SESSION[username],$_SESSION[password],$_SESSION[show_id]);
 			$show = $arr[show];
-?>
-	<header>
-		<div id="show" class="mainlink">
-			<h3><?=$show[name]?></h3>
-		</div>
-		<div id="ex" class="mainlink">
-			<h3>Exhibitors</h3>
-		</div>
-		<div id="birds" class="mainlink">
-			<h3>Birds</h3>
-		</div>
-		<div id="cs" class="mainlink">
-			<h3>Clerk Sheets</h3>
-		</div>
-		<div id="ct" class="mainlink">
-			<h3>Coop Tags</h3>
-		</div>
-		<div id="aw" class="mainlink">
-			<h3>Awards</h3>
-		</div>
-		<div id="lo" class="mainlink">
-			<h3>Logout</h3>
-		</div>
-	</header>
-<?php
+			if($_POST[edit]){
+				$_SESSION[edit] = $_POST[edit];
+			}
 			if(isset($_POST[name])){
 				if(isset($_POST[id]) || ex_exists($show,$_POST[name])){
 					if($_POST[id] != ""){
 						$q = "id = ".$_POST[id];
-						$_POST[ex] = $_POST[id];
+						$_SESSION[ex] = $_POST[id];
 					}
 					else{
 						$q = "name = ".db()->quote($_POST[name]);
-						$_POST[ex] = get_ex_by_name($show,$_POST[name])[id];
+						$_SESSION[ex] = get_ex_by_name($show,$_POST[name])[id];
 					}
-					update_ex($show, "name =".db()->quote($_POST[name]).", address =".db()->quote($_POST[address]).", city=".db()->quote($_POST[city]).", state=".db()->quote($_POST[state]).", email=".db()->quote($_POST[email]).", phone=".db()->quote($_POST[phone]),$q);
+					update_ex($show, "name =".db()->quote($_POST[name]).", address =".db()->quote($_POST[address]).", city=".db()->quote($_POST[city]).", state=".db()->quote($_POST[state]).", email=".db()->quote($_POST[email]).", phone=".db()->quote($_POST[phone]).", zip=".db()->quote($_POST[zip]),$q);
 				}
 				else{
 						add_ex($show,$_POST[name],$_POST[address],$_POST[city],$_POST[state],$_POST[zip],$_POST[email],$_POST[phone]);
-						$_POST[ex] = get_ex_by_name($show,$_POST[name])[id];
+						$_SESSION[ex] = get_ex_by_name($show,$_POST[name])[id];
 				}
 			}
-			if(isset($_POST[ex])){
-				$ex = get_ex($show, $_POST[ex]);
+			if($_POST[ex]){
+				$_SESSION[ex] = $_POST[ex];
+			}
+			if(isset($_SESSION[ex])){
+				$ex = get_ex($show, $_SESSION[ex]);
 				if(isset($_POST[breed]) && $_POST[age] == ""){
 					$ids = get_ids($_POST[division],$_POST[breed],$_POST[variety]);
 					if(!isset($ids[class_id])){
@@ -73,26 +42,64 @@
 						$ids[variety_id] = add_variety_link($show,$ids,$_POST[variety]);
 					}
 					for($i = 0; $i < $_POST[cock]; $i++){
-						add_bird($show,$ex[id],$ids[breed_id],$ids[variety_id],1,$_POST[frizzle]);
+						add_bird($show,$ex[id],$ids[breed_id],$ids[variety_id],1,$_POST[frizzle],$_POST[junior]);
 					}
 					for($i = 0; $i < $_POST[hen]; $i++){
-						add_bird($show,$ex[id],$ids[breed_id],$ids[variety_id],2,$_POST[frizzle]);
+						add_bird($show,$ex[id],$ids[breed_id],$ids[variety_id],2,$_POST[frizzle],$_POST[junior]);
 					}
 					for($i = 0; $i < $_POST[cockerel]; $i++){
-						add_bird($show,$ex[id],$ids[breed_id],$ids[variety_id],3,$_POST[frizzle]);
+						add_bird($show,$ex[id],$ids[breed_id],$ids[variety_id],3,$_POST[frizzle],$_POST[junior]);
 					}
 					for($i = 0; $i < $_POST[pullet]; $i++){
-						add_bird($show,$ex[id],$ids[breed_id],$ids[variety_id],4,$_POST[frizzle]);
+						add_bird($show,$ex[id],$ids[breed_id],$ids[variety_id],4,$_POST[frizzle],$_POST[junior]);
 					}
 				}
 				elseif(isset($_POST[breed])){
 					$ids = get_ids_with_class($_POST[classname],$_POST[breed],$_POST[variety]);
-					update_bird($_POST[id],$show,$ex[id],$ids[breed_id],$ids[variety_id],4,$_POST[frizzle]);
+					update_bird($_POST[id],$show,$ex[id],$ids[breed_id],$ids[variety_id],4,$_POST[frizzle],$_POST[junior]);
 				}
 				elseif($_POST[delete] != ""){
-					delete($show, $_POST["delete"]);
+					delete($show, $_POST["delete"]);	
+				}
+				if(count($_POST)){
+					header("Location: ex.php");
 				}
 ?>
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Exhibitor</title>
+	<link rel="stylesheet" type="text/css" href="manage.css">
+	<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+	<script src="manager.js"></script>	
+</head>
+	<body>
+		<header>
+			<div id="show" class="mainlink">
+				<h3><?=$show[name]?></h3>
+			</div>
+			<div id="ex" class="mainlink">
+				<h3>Exhibitors</h3>
+			</div>
+			<div id="birds" class="mainlink">
+				<h3>Birds</h3>
+			</div>
+			<div id="cs" class="mainlink">
+				<h3>Clerk Sheets</h3>
+			</div>
+			<div id="ct" class="mainlink">
+				<h3>Coop Tags</h3>
+			</div>
+			<div id="aw" class="mainlink">
+				<h3>Awards</h3>
+			</div>
+			<div id="lo" class="mainlink">
+				<h3>Logout</h3>
+			</div>
+		</header>
+
 		<fieldset>
 			<legend>Edit Exhibitor</legend>
 			<form action="ex.php" method="POST">
@@ -111,6 +118,9 @@
 		<fieldset>
 			<legend>Add Birds</legend>
 			<form action="ex.php" method="POST">
+<?php if($show[junior]) {?>
+				Junior: <input type="checkbox" name="junior">
+<?php } ?>
 				Division: LF <input type="radio" name="division" value="Large Fowl">
 						 BTM <input type="radio" name="division" value="Bantam">
 						 WF <input type="radio" name="division" value="Waterfowl">
@@ -135,6 +145,9 @@
 	<p class="l">VARIETY</p>
 	<p>FRIZZLE</p>
 	<p class="s">AGE/SEX</p>
+<?php if($show[junior]){ ?>
+	<p>JUNIOR</p>
+<?php } ?>
 </div>
 <div class="display m">
 <?php
@@ -142,27 +155,28 @@
 					if($bird[classname] == ""){
 						$bird[classname] = class_by_breed($show,$bird[breed_id]);
 					}
-					if($bird[id] == $_POST[edit]){
+					if($bird[id] == $_SESSION[edit] && !count($_POST)){
+						unset($_SESSION[edit]);
 ?>
 <div class="row">
-	<p><?=$bird[id]?></p>
+	<p class="s"><?=$bird[id]?></p>
 	<form action="ex.php" method="POST">
 		<input type="text" name="classname" value="<?=$bird[classname]?>">
 		<input type="text" name="breed" value="<?=$bird[breed]?>">
-		<input type="text" name="variety" value="<?=$bird[variety]?>">
+		<input class="l" type="text" name="variety" value="<?=$bird[variety]?>">
 <?php
-	if($bird[frizzle]){
+						if($bird[frizzle]){
 ?>
 		<input type="checkbox" name="frizzle" checked>
 <?php 
 	}
-	else{
+						else{
 ?>
 		<input type="checkbox" name="frizzled">
 <?php
 	}
 ?>
-		<input type="text" name="age" value="<?=$bird[age]?>">
+		<input class="s" type="text" name="age" value="<?=$bird[age]?>">
 		<input type="hidden" name="id" = value="<?=$bird[id]?>">
 		<input type="hidden" name="ex" value="<?=$ex[id]?>">
 		<input type="submit" value="Save">
@@ -179,6 +193,9 @@
 	<p class="l"><?=$bird[variety]?></p>
 	<p><?=$bird[frizzle]? "Frizzled" : ""?></p>
 	<p class="s"><?=$bird[age]?></p>
+<?php if($show[junior]){ ?>
+	<p><?=$bird[show_num]?"JR":""?></p>
+<?php } ?>
 	<form class="p" action="ex.php" method="POST"><input type="hidden" name="edit" value="<?=$bird[id]?>"><input type="hidden" name="ex" value="<?=$ex[id]?>"><input type="submit" value="Edit"></form>
 	<form class="p" action="ex.php" method="POST"><input type="hidden" name="delete" value="<?=$bird[id]?>"><input type="hidden" name="ex" value="<?=$ex[id]?>"><input type="submit" value="Delete"></form>
 </div>
@@ -211,6 +228,16 @@
 		catch(PDOException $e){
 			die($e);
 		}
+		$u = $_SESSION["username"];
+		$p = $_SESSION[password];
+		$s = $_SESSION[show_id];
+		$e = $_SESSION[ex];
+		session_unset();
+		$_SESSION[username] = $u;
+		$_SESSION[password] = $p;
+		$_SESSION[show_id] = $s;
+		$_SESSION[ex] = $e;
+
 	}
 ?>
 <script type="text/javascript">

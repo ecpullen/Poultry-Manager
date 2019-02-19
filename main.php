@@ -1,14 +1,14 @@
 <?php 
 	session_start();
+	if(isset($_SESSION["username"])){
+		$u = $_SESSION["username"];
+		$p = $_SESSION["password"];
+	}
 	session_destroy();
 	session_start();
+	$_SESSION["username"] = $u;
+	$_SESSION["password"] = $p;
 ?>
-<!DOCTYPE html>
-<html>
-<head>
-	<title>Poultry Manager</title>
-</head>
-<body>
 <?php 
 	include 'mysql.php';
 	if(isset($_POST["username"])){
@@ -48,6 +48,18 @@
 	else{
 		die("<h1>An error occured</h1><a href='index.html'>Try Again</a>");
 	}
+	if(count($_POST)){
+		header("Location: main.php");
+	}
+	?>
+
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Poultry Manager</title>
+</head>
+<body>
+	<?php
 	$user = $rows->fetch();
 	if($user["role"] == "admin" || $user["role"] == "manager"){
 ?>

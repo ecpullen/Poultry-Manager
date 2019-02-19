@@ -1,6 +1,8 @@
 <?php 
 	session_start();
-	if(isset($_SESSION["username"])&&$_SESSION["show_id"]){
+	
+	function main(){
+		if(isset($_SESSION["username"])&&$_SESSION["show_id"]){
 		try{
 			$arr = val_and_showdb($_SESSION[username],$_SESSION[password],$_SESSION[show_id]);
 			$exhibitors = exhibitors($arr[show]);
@@ -38,9 +40,11 @@
 	</form>
 </div>
 <?php
-		}
+}
+
 		catch(PDOException $e){
 			die($e);
 		}
-	}
+}
+}
 ?>

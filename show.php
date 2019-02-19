@@ -1,18 +1,13 @@
 <?php 
 	session_start();
 	include 'mysql.php';
-?>
-
-<!DOCTYPE html>
-<html>
-<?php 
 	if(isset($_SESSION["username"])){
 			if(isset($_POST["show_id"])||isset($_SESSION["show_id"])||isset($_POST["show_name"])){
 				if($_POST[show_name] != ""){
 					$arr = val_and_showdb($_SESSION[username],$_SESSION[password],id_from_sname($_POST[show_name]));
 					$show = $arr[show];
 					$_SESSION["show_id"] = $show[id];
-					$_SESSION["state"] = "home";
+					header("Location: show.php");
 				}
 				elseif(isset($_POST["show_id"])){	
 					$arr = val_and_showdb($_SESSION[username],$_SESSION[password],$_POST[show_id]);
@@ -24,12 +19,39 @@
 					$arr = val_and_showdb($_SESSION[username],$_SESSION[password],$_SESSION[show_id	]);
 					$show = $arr[show];
 				}
-				$showdb = new PDO("mysql:dbname=_$show[id];host=127.0.0.1",
-				"root",
-				"admin123");
-				$showdb->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-				
+				$showdb = $arr[showdb];
+	if(isset($_GET['p'])){
+		switch ($_GET['p']) {
+			case 'home':
+				require("showhome.php");
+				break;
+			case 'ex':
+				require("showex.php");
+				break;
+			case 'birds':
+				require("showbirds.php");
+				break;
+			case 'cs':
+				require("showcs.php");
+				break;
+			case 'ct':
+				require("showct.php");
+				break;
+			case 'aw':
+				require("showaward.php");
+				break;
+			default:
+				require("showhome.php");
+				break;
+		}
+	}
+	else{
+		require("showhome.php");
+	}
 ?>
+<!DOCTYPE html>
+<html>
+
 <head>
 	<title>Manage <?=$show[name]?></title>
 	<link rel="stylesheet" type="text/css" href="manage.css">
@@ -62,34 +84,7 @@
 </header>
 <div id="main">
 <?php 
-	if(isset($_GET['p'])){
-		switch ($_GET['p']) {
-			case 'home':
-				require("showhome.php");
-				break;
-			case 'ex':
-				require("showex.php");
-				break;
-			case 'birds':
-				require("showbirds.php");
-				break;
-			case 'cs':
-				require("showcs.php");
-				break;
-			case 'ct':
-				require("showct.php");
-				break;
-			case 'aw':
-				require("showaward.php");
-				break;
-			default:
-				require("showhome.php");
-				break;
-		}
-	}
-	else{
-		require("showhome.php");
-	}
+	main();
 ?>
 </div>
 <?php
@@ -105,14 +100,67 @@
 		<fieldset>
 			<legend>New Show</legend>
 			<form id = "new_show" action="show.php" method="POST">
-				Show Name:<br />
+				Show Name:
 				<input id = "ns" type="text" name="show_name" required>
 				<br />
+				Date:
+				<input id="date" type="date" name="date" required>
+				<br />
+				Include Junior Show:
+				<input id="jr" type="checkbox" name="junior">
+				<br />
+				Double Show:
+				<input id="ds" type="checkbox" name="double">
+				<br />
+				<span id="doublepick" style="display: none">
+					<select id="show1" name="show1">
+						<option value="2" selected>
+							White
+						</option>
+						<option value="3" >
+							Blue
+						</option>
+						<option value="4" >
+							Green
+						</option>
+						<option value="5" >
+							Yellow
+						</option>
+						<option value="6" >
+							Pink
+						</option>
+					</select>
+					<select id="show2" name="show2">
+						<option value="2" >
+							White
+						</option>
+						<option value="3" selected>
+							Blue
+						</option>
+						<option value="4" >
+							Green
+						</option>
+						<option value="5" >
+							Yellow
+						</option>
+						<option value="6" >
+							Pink
+						</option>
+					</select>
+					<br>
+				</span>
 				<input type="submit" name="submit">
 			</form>
 		</fieldset>
 <?php
 			}
+		$u = $_SESSION["username"];
+		$p = $_SESSION[password];
+		$s = $_SESSION[show_id];
+		session_unset();
+		$_SESSION[username] = $u;
+		$_SESSION[password] = $p;
+		$_SESSION[show_id] = $s;
 		
 	}
 	else{

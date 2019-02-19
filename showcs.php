@@ -7,21 +7,36 @@
 			$var = "";
 			$breed = "";
 			$age = "";
+			$classname = "";
+			$jr = "";
+		}
+		catch(PDOException $e){
+			die($e);
+		}
+	}
+	function main(){
 ?>
 <div class="display">
 <div>
 <?php
+$show = val_and_showdb($_SESSION[username],$_SESSION[password],$_SESSION[show_id])[show];
+$birds = birds($show);
 			foreach ($birds as $bird) {
-				if($var != $bird[variety] || $breed != $bird[breed]){
+				if($var != $bird[variety] || $breed != $bird[breed] || $classname != $bird[classname] || $jr != $bird[show_num]){
 					$age = $bird[age];
 					$var = $bird[variety];
 					$breed = $bird[breed];
+					$classname = $bird[classname];
+					$jr = $bird[show_num];
 					$q = "SELECT * from birds where breed_id = $bird[breed_id] and variety_id = $bird[variety_id]";
 					$count = showdb($show)->query($q)->rowCount();
 ?>
 </div>
 <div class="page">
 	<div class="row head">
+<?php if($show[junior]){ ?>
+		<p><?=$bird[show_num]?"JR":"OPEN"?></p>
+<?php } ?>
 		<p><?=$bird[classname]?></p>
 		<p><?=$bird[breed]?></p>
 		<p class="l"><?=$bird[variety].($bird[NR]?" NRB":"")?></p>
@@ -46,14 +61,10 @@
 		<p class="s"><?=$bird[ex_id]?></p>
 	</div>
 <?php
-			}
+	}
 ?>
 </div>
 </div>
 <?php
-		}
-		catch(PDOException $e){
-			die($e);
-		}
-	}
+	}	
 ?>
