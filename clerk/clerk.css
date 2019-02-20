@@ -1,6 +1,4 @@
-html{
-	width: 100%;
-}
+
 
 p{
 	padding-block-start: 1em;
@@ -48,3 +46,31 @@ p{
 	text-align: left;
 }
 
+@media only screen 
+  and (min-device-width: 320px) 
+  and (max-device-width: 480px)
+  and (-webkit-min-device-pixel-ratio: 2)
+  and (orientation: portrait) {
+	html{
+		width: 100%;
+		font-size: 36pt;
+	}
+
+	select{
+		-webkit-appearance: none;
+		font-size: 36pt;
+	}
+
+	/*input[type='radio']{
+		transform: scale(2);
+		height: 36pt;
+		width: 30pt;
+	}*/
+	input[type="radio"] {
+	    -ms-transform: scale(2);
+	    -webkit-transform: scale(2);
+	    height: 25pt;
+	    margin-left: 7pt;
+	    transform: scale(2); 
+	}
+}

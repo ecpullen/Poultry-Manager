@@ -66,7 +66,7 @@
 	<h1>Welcome, <?=$user['username']?></h1>
 <?php 
 		try{
-			$shows = $db->query("select * from shows where admin_id=$user[id];");
+			$shows = $db->query("select * from shows where admin_id=$user[id] order by date desc;");
 		}catch(PDOException $e){
 			echo $e;
 		}

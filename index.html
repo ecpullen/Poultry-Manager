@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Poultry Manager</title>
+	<title>The Poultry Hub</title>
 	<link rel="stylesheet" type="text/css" href="style.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 	<script src="main.js"></script>
@@ -9,7 +9,7 @@
 <body>
 <header>
 	<div id="home" class="mainlink">
-		<h3>Poultry Manager</h3>
+		<h3>The Poultry Hub</h3>
 	</div>
 	<div id="services" class="mainlink">
 		<h3>Services</h3>
@@ -17,53 +17,7 @@
 	<div id="clerklogin" class="mainlink">
 		<h3>Clerk Login</h3>
 	</div>
-	<div id="exlogin" class="mainlink">
-		<h3>Exhibitor Login</h3>
-	</div>
-	<div id="seclogin" class="mainlink">
-		<h3>Secretary Login</h3>
-	</div>
-	<div id="sup" class="mainlink">
-		<h3>Sign Up</h3>
-	</div>
-
-</header>
-	<div class="slider">
-		<div class="slide">
-			<img src="images/exhibitors.png">
-		</div>
-		<div class="slide">
-			<img src="images/birds.png">
-		</div>
-		<div class="slide">
-			<img src="images/clerksheet.png">
-		</div>
-		<div class="slide">
-			<img src="images/clerksheetprint.png">
-		</div>
-		<div class="slide">
-			<img src="images/cooptagprint.png">
-		</div>
-		<div class="slide">
-			<img src="images/awards.png">
-		</div>
-	</div>
-	<div id="login" class="login popup">
-		<fieldset>
-			<legend>Secretary Sign In</legend>
-			<form action="main.php" method="POST">
-				Username:<br />
-				<input type="text" name="username" required>
-				<br />
-				Password:<br />
-				<input type="password" name="password" required>
-				<br />
-				<input type="submit" name="submit">
-				<input class="exit" type="button" name="cancel" value = "Cancel">
-			</form>
-		</fieldset>
-	</div>
-	<div id="clogin" class="login popup">
+	<div id="clogin" class="login popup" style="display: none">
 		<fieldset>
 			<legend>Clerk Sign In</legend>
 			<form action="clerk/clerk.php" method="POST">
@@ -81,7 +35,31 @@
 			</form>
 		</fieldset>
 	</div>
-	<div id="signup" class="popup">
+	<div id="exlogin" class="mainlink">
+		<h3>Exhibitor Login</h3>
+	</div>
+	<div id="seclogin" class="mainlink">
+		<h3>Secretary Login</h3>
+	</div>
+	<div id="login" class="login popup" style="display: none">
+		<fieldset>
+			<legend>Secretary Sign In</legend>
+			<form action="main.php" method="POST">
+				Username:<br />
+				<input type="text" name="username" required>
+				<br />
+				Password:<br />
+				<input type="password" name="password" required>
+				<br />
+				<input type="submit" name="submit">
+				<input class="exit" type="button" name="cancel" value = "Cancel">
+			</form>
+		</fieldset>
+	</div>
+	<div id="sup" class="mainlink">
+		<h3>Sign Up</h3>
+	</div>
+	<div id="signup" class="popup" style="display: none">
 		<fieldset>
 			<legend>Sign Up</legend>
 			<form id="signupform" action="signup.php" method="POST">
@@ -109,7 +87,31 @@
 			</form>
 		</fieldset>
 	</div>
-	<div class="popup" id="spop">
+</header>
+	<div class="slider">
+		<div class="slide">
+			<img src="images/exhibitors.png">
+		</div>
+		<div class="slide">
+			<img src="images/birds.png">
+		</div>
+		<div class="slide">
+			<img src="images/clerksheet.png">
+		</div>
+		<div class="slide">
+			<img src="images/clerksheetprint.png">
+		</div>
+		<div class="slide">
+			<img src="images/cooptagprint.png">
+		</div>
+		<div class="slide">
+			<img src="images/awards.png">
+		</div>
+	</div>
+	
+	
+	
+	<div class="popup" id="spop" style="display: none">
 		<h2>Poultry Manager offers show secretaries an effecient way of organizing club shows.</h2>
 		<div id="servicedisplay">
 			<div class="service">

@@ -34,7 +34,7 @@ if(isset($_SESSION["username"])&&isset($_POST["show_name"])){
 			phone VARCHAR(20),
 			PRIMARY KEY (id)
 			);");
-		$showdb->query("CREATE TABLE awards(type VARCHAR(5),number INT(3),place INT(2),bird_id INT(5),show_num INT(2));");
+		$showdb->query("CREATE TABLE awards(type VARCHAR(5),number INT(3),place INT(2),bird_id INT(5),show_num INT(2), clerk VARCHAR(50), judge VARCHAR(50));");
 		$showdb->query("CREATE TABLE birds(id int(5) NOT NULL AUTO_INCREMENT PRIMARY KEY,ex_id int(4),age_id VARCHAR(10),variety_id VARCHAR(50),breed_id int(11),frizzle BOOLEAN, show_num INT(2));");
 		$showdb->exec("CREATE TABLE divisions LIKE info.divisions;
 						INSERT INTO divisions  

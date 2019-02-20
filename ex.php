@@ -2,7 +2,6 @@
 	session_start();
 	include 'mysql.php';
 	if(isset($_SESSION["username"])&&$_SESSION["show_id"]){
-
 		try{
 			$arr = val_and_showdb($_SESSION[username],$_SESSION[password],$_SESSION[show_id]);
 			$show = $arr[show];
@@ -36,7 +35,6 @@
 					if(!isset($ids[class_id])){
 						$ids = get_breed_with_div($show,$_POST[division],$_POST[breed]);
 						if(!isset($ids[class_id])){
-							echo "adding breed";
 							$ids = add_breed($show, get_division($show,$_POST[division]), $_POST[breed]);
 						}
 						$ids[variety_id] = add_variety_link($show,$ids,$_POST[variety]);
@@ -62,8 +60,10 @@
 					delete($show, $_POST["delete"]);	
 				}
 				if(count($_POST)){
+					// print_r($_SESSION);
 					header("Location: ex.php");
 				}
+				// print_r($_SESSION);
 ?>
 <!DOCTYPE html>
 <html>
@@ -124,6 +124,7 @@
 				Division: LF <input type="radio" name="division" value="Large Fowl">
 						 BTM <input type="radio" name="division" value="Bantam">
 						 WF <input type="radio" name="division" value="Waterfowl">
+						 Pigeon <input type="radio" name="division" value="Pigeon">
 				Breed: <input type="text" name="breed" required>
 				Variety: <input type="text" name="variety">
 				Frizzled:<input type="checkbox" name="frizzle" value = 'TRUE'>
@@ -136,6 +137,7 @@
 			</form>
 		</fieldset>
 <?php
+				// print_r($_SESSION);
 				$birds = birds_by_ex($show,$ex[id]);
 ?>
 <div class="row head">
@@ -160,7 +162,7 @@
 ?>
 <div class="row">
 	<p class="s"><?=$bird[id]?></p>
-	<form action="ex.php" method="POST">
+	<form class="b_edit" action="ex.php" method="POST">
 		<input type="text" name="classname" value="<?=$bird[classname]?>">
 		<input type="text" name="breed" value="<?=$bird[breed]?>">
 		<input class="l" type="text" name="variety" value="<?=$bird[variety]?>">
@@ -177,6 +179,20 @@
 	}
 ?>
 		<input class="s" type="text" name="age" value="<?=$bird[age]?>">
+<?php
+						if($show[junior]){
+							if($bird[show_num]){
+?>
+		<input type="checkbox" name="junior" checked>
+<?php 
+	}
+							else{
+?>
+		<input type="checkbox" name="junior">
+<?php
+		}
+	}
+?>
 		<input type="hidden" name="id" = value="<?=$bird[id]?>">
 		<input type="hidden" name="ex" value="<?=$ex[id]?>">
 		<input type="submit" value="Save">
@@ -208,9 +224,43 @@
 			}
 			else{
 ?>
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Exhibitor</title>
+	<link rel="stylesheet" type="text/css" href="manage.css">
+	<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+	<script src="manager.js"></script>	
+</head>
+	<body>
+		<header>
+			<div id="show" class="mainlink">
+				<h3><?=$show[name]?></h3>
+			</div>
+			<div id="ex" class="mainlink">
+				<h3>Exhibitors</h3>
+			</div>
+			<div id="birds" class="mainlink">
+				<h3>Birds</h3>
+			</div>
+			<div id="cs" class="mainlink">
+				<h3>Clerk Sheets</h3>
+			</div>
+			<div id="ct" class="mainlink">
+				<h3>Coop Tags</h3>
+			</div>
+			<div id="aw" class="mainlink">
+				<h3>Awards</h3>
+			</div>
+			<div id="lo" class="mainlink">
+				<h3>Logout</h3>
+			</div>
+		</header>
 <fieldset>
 			<legend>New Exhibitor</legend>
-			<form action="ex.php" method="POST">
+			<form id="n_ex" action="ex.php" method="POST">
 				Name: <input type="text" name="name" required>
 				Address: <input type="text" name="address" required>
 				City: <input type="text" name="city" required>
@@ -232,11 +282,17 @@
 		$p = $_SESSION[password];
 		$s = $_SESSION[show_id];
 		$e = $_SESSION[ex];
+		if($_SESSION[edit]){
+			$edit = $_SESSION[edit];
+		}
 		session_unset();
 		$_SESSION[username] = $u;
 		$_SESSION[password] = $p;
 		$_SESSION[show_id] = $s;
 		$_SESSION[ex] = $e;
+		if($edit){
+			$_SESSION[edit] = $edit;
+		}
 
 	}
 ?>

@@ -100,7 +100,7 @@ function get_birds($show,$class,$breed,$var,$age){
 function get_birds_rev($show,$breed,$var,$age){
 	$fri = $var%2;
 	$var = ($var-$fri)/2;
-	return showdb($show)->query("SELECT birds.*,breed,variety,age FROM birds JOIN varieties on birds.variety_id = varieties.id join breeds on birds.breed_id = breeds.id join ages on birds.age_id = ages.id where breeds.id = $breed and varieties.id = $var and frizzle = $fri and age like '$age' ORDER BY birds.id");
+	return showdb($show)->query("SELECT birds.*,breed,variety,age FROM birds JOIN varieties on birds.variety_id = varieties.id join breeds on birds.breed_id = breeds.id join ages on birds.age_id = ages.id where breeds.id = $breed and varieties.id = $var and frizzle = $fri and age like '$age' and birds.show_num = $_SESSION[junior] ORDER BY birds.id");
 }
 function get_vars($show,$breed_id){
 	if(showdb($show)->query("SELECT * from cbv where breed_id = $breed_id and NR = 0")->rowCount()){
@@ -175,6 +175,7 @@ function update_bird($id,$show, $ex_id, $breed_id, $variety_id, $age_id, $frizzl
 	else{
 		$frizzle = 'TRUE';
 	}
+	$jr = $jr?1:0;
 	showdb($show)->query("UPDATE birds SET age_id = $age_id, variety_id = $variety_id, breed_id = $breed_id, frizzle = $frizzle, show_num = $jr WHERE id = $id");
 }
 function delete($show, $id){
@@ -211,7 +212,7 @@ function add_variety_link($show, $ids, $variety){
 	if(!$variety_id){
 		$variety_id = add_variety($show, $variety);
 	}
-	showdb($show)->query("INSERT INTO cbv VALUES($ids[class_id],$ids[breed_id],$variety_id,1)");
+	showdb($show)->query("INSERT INTO cbv VALUES($ids[class_id],$ids[breed_id],$variety_id,".($ids[class_id] >= 25? 0 : 1).")");
 	return $variety_id;
 }
 function get_ex($show, $id){
@@ -239,7 +240,7 @@ function finalize($show){
 		INSERT INTO birds (ex_id,age_id,variety_id,breed_id,frizzle) SELECT ex_id,age_id,variety_id,breed_id,frizzle FROM temp");
 }
 function addAward($show, $type, $num, $rank, $bird){
-	showdb($show)->query("INSERT INTO awards VALUES (".db()->quote($type).",$num,$rank,$bird, $_SESSION[show_num])");
+	showdb($show)->query("INSERT INTO awards VALUES (".db()->quote($type).",$num,$rank,$bird, $_SESSION[show_num], '$_SESSION[clerk]', '$_SESSION[judge]')");
 }
 function get_rank($show, $bird_id){
 	$row = showdb($show)->query("SELECT place from awards where bird_id = $bird_id and type = 'R' and show_num = $_SESSION[show_num]");
@@ -296,7 +297,7 @@ function get_ordered_age_ranks($show, $breed_id, $variety_id, $age){
 	return showdb($show)->query("SELECT DISTINCT bird_id, place from awards join birds on birds.id = bird_id where breed_id = $breed_id and variety_id = $variety_id and age_id = $age and frizzle = $fri and type='R' and awards.show_num = $_SESSION[show_num] and birds.show_num = $_SESSION[junior] order by place");
 }
 function get_ordered_var_ranks($show, $breed_id, $var){
-	return showdb($show)->query("SELECT DISTINCT bird_id, place from awards join birds on birds.id = bird_id where breed_id = $breed_id and number = $var and type='V' and awards.show_num = $_SESSION[show_num] order by place");
+	return showdb($show)->query("SELECT DISTINCT bird_id, place from awards join birds on birds.id = bird_id where breed_id = $breed_id and number = $var and type='V' and awards.show_num = $_SESSION[show_num] and birds.show_num = $_SESSION[junior] order by place");
 }
 function get_ordered_bre_ranks($show, $class_id, $var){
 	return showdb($show)->query("SELECT DISTINCT bird_id, place from awards join birds on birds.id = bird_id join cbv on birds.breed_id = cbv.breed_id and birds.variety_id = cbv.variety_id where class_id = $class_id and number = $var and type='B' and awards.show_num = $_SESSION[show_num] and birds.show_num = $_SESSION[junior] order by place");

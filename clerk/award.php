@@ -638,7 +638,7 @@
 <div class="row entry">
 		<p class="s">COOP: <?=$bird[id]?></p><br>
 		<form>
-			None<input class="none" type="radio" name="place" value="<?=$bird[id]?>">
+			<!-- <label> -->None<input class="none" type="radio" name="place" value="<?=$bird[id]?>">
 <?php $rank = get_rank($show, $bird[id]) ?>
 			1<input class="_1" type="radio" name="place" value="<?=5*$bird[id]?>" <?=$rank == 1 ? "checked" : ""?>>
 			2<input class="_2" type="radio" name="place" value="<?=5*$bird[id] + 1?>" <?=$rank == 2 ? "checked" : ""?>>
