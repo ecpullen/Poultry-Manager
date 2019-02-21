@@ -7,6 +7,10 @@ body{
 }
 
 header{
+	overflow-x: scroll;
+}
+
+header{
 	display: absolute;
 	top: 0;
 	left: 0;
@@ -18,9 +22,22 @@ header{
 
 header .mainlink{
 	text-align: center;
-	display: inline-block;
+	display: block;
+	float: left;
 	height: 50px;
-	width: 14%;
+	padding-left: 25px;
+	padding-right: 25px;
+}
+
+header .mainlink img{
+	height: 100%;
+	overflow: hidden;
+	float: left;
+	padding-left: 10px;
+}
+
+header .mainlink#home h3{
+	float: left;
 }
 
 header .mainlink:hover{
@@ -105,15 +122,15 @@ header .mainlink:hover{
 	background: black;
 }
 
-.row form input{
+.row form.p input{
 	display: inline-block;
 	width: 11%;
 }
 .row form input[type='checkbox']{
 	display: inline-block;
 	width: 10px;
-	margin-left: calc(5.5% - 5px);
-	margin-right: calc(5.5% - 5px);
+	margin-left: calc(5.55% - 5px);
+	margin-right: calc(5.55% - 5px);
 }
 
 
@@ -121,6 +138,16 @@ header .mainlink:hover{
 	display: inline-block;
 	width: 10%;
 	text-align: center;
+}
+
+.row form .p{
+	width: 10.7%;
+}
+.row form .s{
+	width: 5.6%;
+}
+.row form .l{
+	width: 16.26%;
 }
 
 .row form.p input{

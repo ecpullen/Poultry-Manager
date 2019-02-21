@@ -60,6 +60,10 @@
 </head>
 <body>
 <header>
+	<div id="home" class="mainlink">
+		<img src="logo.png">
+		<h3>The Poultry Hub</h3>
+	</div>
 	<div id="show" class="mainlink">
 		<h3><?=$show[name]?></h3>
 	</div>

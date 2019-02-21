@@ -57,8 +57,90 @@
 <html>
 <head>
 	<title>Poultry Manager</title>
+	<link rel="stylesheet" type="text/css" href="style.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="main.js"></script>
 </head>
 <body>
+	<header>
+	<div id="home" class="mainlink">
+		<img src="logo.png">
+		<h3>The Poultry Hub</h3>
+	</div>
+	<div id="clerklogin" class="mainlink">
+		<h3>Clerk Login</h3>
+	</div>
+	<div id="clogin" class="login popup" style="display: none">
+		<fieldset>
+			<legend>Clerk Sign In</legend>
+			<form action="clerk/clerk.php" method="POST">
+				Name:<br />
+				<input type="text" name="name" required>
+				<br />
+				Judge:<br />
+				<input type="text" name="judge" required>
+				<br />
+				Show Id:<br />
+				<input type="text" name="id" required>
+				<br />
+				<input type="submit" name="submit">
+				<input class="exit" type="button" name="cancel" value = "Cancel">
+			</form>
+		</fieldset>
+	</div>
+	<div id="exlogin" class="mainlink">
+		<h3>Exhibitor Login</h3>
+	</div>
+	<div id="seclogin" class="mainlink">
+		<h3>Secretary Login</h3>
+	</div>
+	<div id="login" class="login popup" style="display: none">
+		<fieldset>
+			<legend>Secretary Sign In</legend>
+			<form action="main.php" method="POST">
+				Username:<br />
+				<input type="text" name="username" required>
+				<br />
+				Password:<br />
+				<input type="password" name="password" required>
+				<br />
+				<input type="submit" name="submit">
+				<input class="exit" type="button" name="cancel" value = "Cancel">
+			</form>
+		</fieldset>
+	</div>
+	<div id="sup" class="mainlink">
+		<h3>Sign Up</h3>
+	</div>
+	<div id="signup" class="popup" style="display: none">
+		<fieldset>
+			<legend>Sign Up</legend>
+			<form id="signupform" action="signup.php" method="POST">
+				Email:<br />
+				<input type="email" name="email" required>
+				<br />
+				Username:<br />
+				<input type="text" name="username" required>
+				<br />
+				Password:<br />
+				<input type="password" name="spassword" required>
+				<br />
+				Confirm Password:<br />
+				<input type="password" name="sconfirmpassword" required>
+				<br />
+				Role:<br />
+				<select name="role" required>
+					<option disabled selected></option>
+					<option value="manager">Secretary</option>
+					<option value="user">User</option>
+				</select>
+				<br>
+				<input type="submit" name="submit">
+				<input class="exit" type="button" name="cancel" value = "Cancel">
+			</form>
+		</fieldset>
+	</div>
+</header>
 	<?php
 	$user = $rows->fetch();
 	if($user["role"] == "admin" || $user["role"] == "manager"){

@@ -9,6 +9,9 @@ function db(){
 function get_age($age_id){
 	return db()->query("SELECT * FROM ages where id = $age_id")->fetch()[age];
 }
+function get_age_id($age){
+	return db()->query("SELECT * FROM ages where age like '$age'")->fetch()[id];
+}
 function get_var($variety_id){
 	return db()->query("SELECT * FROM varieties where id = $variety_id")->fetch()[variety];
 }
@@ -184,8 +187,8 @@ function delete($show, $id){
 function get_ids($division,$breed,$variety){
 	return db()->query("SELECT cbv.class_id, breed_id, variety_id FROM cbv join breeds on breeds.id = breed_id join varieties on varieties.id = variety_id join divisions ON divisions.class_id = cbv.class_id where division like '$division' and breed like '$breed' and variety like '$variety'")->fetch();
 }
-function get_ids_with_class($class,$breed,$variety){
-	return db()->query("SELECT cbv.class_id, breed_id, variety_id FROM cbv join breeds on breeds.id = breed_id join varieties on varieties.id = variety_id join classes ON classes.id = cbv.class_id where classes.classname like '$class' and breed like '$breed' and variety = '$variety'")->fetch();
+function get_ids_with_class($show,$class,$breed,$variety){
+	return showdb($show)->query("SELECT cbv.class_id, breed_id, variety_id FROM cbv join breeds on breeds.id = breed_id join varieties on varieties.id = variety_id join classes ON classes.id = cbv.class_id where classes.classname like '$class' and breed like '$breed' and variety = '$variety'")->fetch();
 }
 function get_breed_with_div($show, $division, $breed){
 	return showdb($show)->query("SELECT cbv.class_id, breed_id FROM cbv join breeds on breeds.id = breed_id join divisions ON divisions.class_id = cbv.class_id where division like '$division' and breed like '$breed'")->fetch();

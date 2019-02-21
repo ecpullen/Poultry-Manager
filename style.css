@@ -18,13 +18,29 @@ header{
 
 header .mainlink{
 	text-align: center;
-	display: inline-block;
+	display: block;
+	float: left;
 	height: 50px;
 	width: 14%;
 }
 
+header .mainlink img{
+	height: 100%;
+	overflow: hidden;
+	float: left;
+	padding-left: 10px;
+}
+
+header .mainlink#home h3{
+	float: left;
+}
+
 header .mainlink:hover{
 	background-color: rgba(0,0,0,.2);
+}
+
+.popup{
+	color: black;
 }
 
 .login, #signup{

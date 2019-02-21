@@ -53,8 +53,9 @@
 					}
 				}
 				elseif(isset($_POST[breed])){
-					$ids = get_ids_with_class($_POST[classname],$_POST[breed],$_POST[variety]);
-					update_bird($_POST[id],$show,$ex[id],$ids[breed_id],$ids[variety_id],4,$_POST[frizzle],$_POST[junior]);
+					$ids = get_ids_with_class($show,$_POST[classname],$_POST[breed],$_POST[variety]);
+					// print_r($ids);
+					update_bird($_POST[id],$show,$ex[id],$ids[breed_id],$ids[variety_id],$_POST[age],$_POST[frizzle],$_POST[junior]);
 				}
 				elseif($_POST[delete] != ""){
 					delete($show, $_POST["delete"]);	
@@ -163,22 +164,35 @@
 <div class="row">
 	<p class="s"><?=$bird[id]?></p>
 	<form class="b_edit" action="ex.php" method="POST">
-		<input type="text" name="classname" value="<?=$bird[classname]?>">
-		<input type="text" name="breed" value="<?=$bird[breed]?>">
+		<input class="p" type="text" name="classname" value="<?=$bird[classname]?>">
+		<input class="p" type="text" name="breed" value="<?=$bird[breed]?>">
 		<input class="l" type="text" name="variety" value="<?=$bird[variety]?>">
 <?php
 						if($bird[frizzle]){
 ?>
-		<input type="checkbox" name="frizzle" checked>
+		<input class="p" type="checkbox" name="frizzle" checked>
 <?php 
 	}
 						else{
 ?>
-		<input type="checkbox" name="frizzled">
+		<input class="p" type="checkbox" name="frizzled">
 <?php
 	}
 ?>
-		<input class="s" type="text" name="age" value="<?=$bird[age]?>">
+		<select class="s" name="age">
+			<option <?=strcmp($bird[age],'cock') == 1?"selected":""?> value=1>
+				COCK
+			</option>
+			<option <?=strcmp($bird[age],'hen') == 1?"selected":""?> value=2>
+				HEN
+			</option>
+			<option <?=strcmp($bird[age],'cockerel') == 1?"selected":""?> value=3>
+				COCKEREL
+			</option>
+			<option <?=strcmp($bird[age],'pullet') == 1?"selected":""?> value=4>
+				PULLET
+			</option>
+		</select>
 <?php
 						if($show[junior]){
 							if($bird[show_num]){
@@ -195,7 +209,7 @@
 ?>
 		<input type="hidden" name="id" = value="<?=$bird[id]?>">
 		<input type="hidden" name="ex" value="<?=$ex[id]?>">
-		<input type="submit" value="Save">
+		<input class="p" type="submit" value="Save">
 	</form>
 </div>
 <?php
