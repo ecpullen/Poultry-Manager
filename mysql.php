@@ -48,7 +48,7 @@ function id_from_sname($sname){
 	return db()->query("select * from shows where name = ".db()->quote($sname).";")->fetch()[id];
 }
 function user($uname){
-	$user = db()->query("select * from users where username = ".db()->quote($uname).";")->fetch();
+	return db()->query("select * from users where username = ".db()->quote($uname).";")->fetch();
 }
 function birds($show){
 	return showdb($show)->query("SELECT birds.id,classname,breed,variety,age,age_id,ex_id,birds.breed_id,birds.variety_id, frizzle, NR, show_num FROM birds JOIN cbv on birds.breed_id = cbv.breed_id and birds.variety_id = cbv.variety_id JOIN varieties on cbv.variety_id = varieties.id join breeds on cbv.breed_id = breeds.id join classes on cbv.class_id = classes.id join ages on birds.age_id = ages.id ORDER BY show_num,classes.id, breed, NR, variety, frizzle, age_id, ex_id");
@@ -237,10 +237,10 @@ function finalize($show){
 	$showdb = showdb($show);
 	$showdb->exec("DROP TABLE IF EXISTS temp");
 	$showdb->exec("CREATE TABLE temp LIKE birds;
-						INSERT INTO temp (ex_id,age_id,variety_id,breed_id,frizzle) SELECT ex_id,birds.age_id,birds.variety_id,birds.breed_id,frizzle FROM birds JOIN cbv on birds.breed_id = cbv.breed_id and birds.variety_id =cbv.variety_id JOIN varieties on cbv.variety_id = varieties.id join breeds on cbv.breed_id = breeds.id join classes on cbv.class_id = classes.id join ages on birds.age_id = ages.id ORDER BY junior,classes.id, breed, variety, frizzle, age_id, ex_id");
+						INSERT INTO temp (ex_id,age_id,variety_id,breed_id,frizzle, show_num) SELECT ex_id,birds.age_id,birds.variety_id,birds.breed_id,frizzle,show_num FROM birds JOIN cbv on birds.breed_id = cbv.breed_id and birds.variety_id =cbv.variety_id JOIN varieties on cbv.variety_id = varieties.id join breeds on cbv.breed_id = breeds.id join classes on cbv.class_id = classes.id join ages on birds.age_id = ages.id ORDER BY show_num,classes.id, breed, variety, frizzle, age_id, ex_id");
 	$showdb->exec("DROP TABLE birds;");
 	$showdb->exec("CREATE TABLE birds LIKE temp;
-		INSERT INTO birds (ex_id,age_id,variety_id,breed_id,frizzle) SELECT ex_id,age_id,variety_id,breed_id,frizzle FROM temp");
+		INSERT INTO birds (ex_id,age_id,variety_id,breed_id,frizzle,show_num) SELECT ex_id,age_id,variety_id,breed_id,frizzle,show_num FROM temp");
 }
 function addAward($show, $type, $num, $rank, $bird){
 	showdb($show)->query("INSERT INTO awards VALUES (".db()->quote($type).",$num,$rank,$bird, $_SESSION[show_num], '$_SESSION[clerk]', '$_SESSION[judge]')");

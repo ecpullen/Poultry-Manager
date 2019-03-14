@@ -62,83 +62,13 @@
 	<script src="main.js"></script>
 </head>
 <body>
-	<header>
+	<header id="mainheader">
 	<div id="home" class="mainlink">
 		<img src="logo.png">
 		<h3>The Poultry Hub</h3>
 	</div>
-	<div id="clerklogin" class="mainlink">
-		<h3>Clerk Login</h3>
-	</div>
-	<div id="clogin" class="login popup" style="display: none">
-		<fieldset>
-			<legend>Clerk Sign In</legend>
-			<form action="clerk/clerk.php" method="POST">
-				Name:<br />
-				<input type="text" name="name" required>
-				<br />
-				Judge:<br />
-				<input type="text" name="judge" required>
-				<br />
-				Show Id:<br />
-				<input type="text" name="id" required>
-				<br />
-				<input type="submit" name="submit">
-				<input class="exit" type="button" name="cancel" value = "Cancel">
-			</form>
-		</fieldset>
-	</div>
-	<div id="exlogin" class="mainlink">
-		<h3>Exhibitor Login</h3>
-	</div>
-	<div id="seclogin" class="mainlink">
-		<h3>Secretary Login</h3>
-	</div>
-	<div id="login" class="login popup" style="display: none">
-		<fieldset>
-			<legend>Secretary Sign In</legend>
-			<form action="main.php" method="POST">
-				Username:<br />
-				<input type="text" name="username" required>
-				<br />
-				Password:<br />
-				<input type="password" name="password" required>
-				<br />
-				<input type="submit" name="submit">
-				<input class="exit" type="button" name="cancel" value = "Cancel">
-			</form>
-		</fieldset>
-	</div>
-	<div id="sup" class="mainlink">
-		<h3>Sign Up</h3>
-	</div>
-	<div id="signup" class="popup" style="display: none">
-		<fieldset>
-			<legend>Sign Up</legend>
-			<form id="signupform" action="signup.php" method="POST">
-				Email:<br />
-				<input type="email" name="email" required>
-				<br />
-				Username:<br />
-				<input type="text" name="username" required>
-				<br />
-				Password:<br />
-				<input type="password" name="spassword" required>
-				<br />
-				Confirm Password:<br />
-				<input type="password" name="sconfirmpassword" required>
-				<br />
-				Role:<br />
-				<select name="role" required>
-					<option disabled selected></option>
-					<option value="manager">Secretary</option>
-					<option value="user">User</option>
-				</select>
-				<br>
-				<input type="submit" name="submit">
-				<input class="exit" type="button" name="cancel" value = "Cancel">
-			</form>
-		</fieldset>
+	<div id="lo" class="mainlink">
+		<h3>Logout</h3>
 	</div>
 </header>
 	<?php
@@ -152,18 +82,28 @@
 		}catch(PDOException $e){
 			echo $e;
 		}
+?>
+<div class="rows">
+<?php
 		foreach($shows as $show){
 ?>
-	<form action="show.php" method="post">
-		<input type="submit" value="<?=$show['name']?>">
-		<input type="hidden" name="show_id" value="<?=$show[id]?>">
-	</form>
+	<div class="row">
+		<p><?=$show['name']?></p>
+		<form action="show.php" method="post">
+			<input type="submit" value="Edit">
+			<input type="hidden" name="show_id" value="<?=$show[id]?>">
+		</form>
+	</div>
 <?php
 		}
 ?>
+<div class="row">
+	<p>Create New Show</p>
 	<form action="show.php" method="post">
 		<input type="submit" name="ns" value="New Show">
 	</form>
+</div>
+</div>
 <?php
 	}
 	else{

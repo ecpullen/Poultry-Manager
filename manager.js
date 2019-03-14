@@ -1,5 +1,9 @@
 
 $(document).ready(function(){
+	$("#home").click(function(){
+		console.log("here")
+		window.location.href = "main.php";
+	})
 	$("#show").click(function(){
 		console.log("here")
 		window.location.href = "show.php?p=home";

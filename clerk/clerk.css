@@ -60,12 +60,6 @@ p{
 		-webkit-appearance: none;
 		font-size: 36pt;
 	}
-
-	/*input[type='radio']{
-		transform: scale(2);
-		height: 36pt;
-		width: 30pt;
-	}*/
 	input[type="radio"] {
 	    -ms-transform: scale(2);
 	    -webkit-transform: scale(2);

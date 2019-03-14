@@ -11,7 +11,7 @@ header{
 }
 
 header{
-	display: absolute;
+	overflow: hidden;
 	top: 0;
 	left: 0;
 	right: 0;
@@ -27,6 +27,7 @@ header .mainlink{
 	height: 50px;
 	padding-left: 25px;
 	padding-right: 25px;
+	cursor: pointer;q
 }
 
 header .mainlink img{
@@ -42,6 +43,11 @@ header .mainlink#home h3{
 
 header .mainlink:hover{
 	background-color: rgba(0,0,0,.2);
+
+}
+
+header .mainlink#home:hover{
+	background-color: rgba(0,0,0,0);
 }
 
 .popup{
@@ -242,6 +248,9 @@ input{
   		background-color: rgba(0,0,0,.8);
   		display: inherit;
   		height: auto;
+  	}
+  	#mainheader{
+  		display: none;
   	}
 	#show{
 		width: 100%;
