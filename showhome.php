@@ -6,9 +6,9 @@
 		try{
 			$arr = val_and_showdb($_SESSION[username],$_SESSION[password],$_SESSION[show_id]);
 			$show = $arr[show];
-			$showdb = showdb($arr[show]);
-			$ex = $showdb->query("SELECT * FROM exhibitors")->rowCount();
-			$bnum = $showdb->query("SELECT * FROM birds")->rowCount();
+			// $showdb = showdb($arr[show]);
+			$ex = ex_count($arr[show]);
+			$bnum = b_count($arr[show]);
 			$lf = get_LF($arr[show])->rowCount();
 			$btm = get_BTM($arr[show])->rowCount();
 			$wf = get_WF($arr[show])->rowCount();

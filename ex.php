@@ -31,7 +31,7 @@
 			if(isset($_SESSION[ex])){
 				$ex = get_ex($show, $_SESSION[ex]);
 				if(isset($_POST[breed]) && $_POST[age] == ""){
-					$ids = get_ids($_POST[division],$_POST[breed],$_POST[variety]);
+					$ids = get_ids($show, $_POST[division],$_POST[breed],$_POST[variety]);
 					if(!isset($ids[class_id])){
 						$ids = get_breed_with_div($show,$_POST[division],$_POST[breed]);
 						if(!isset($ids[class_id])){

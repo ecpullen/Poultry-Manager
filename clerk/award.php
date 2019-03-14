@@ -610,7 +610,7 @@
 		$show = get_show($_SESSION[show_id]);
 		$divs = get_ages($show,$_POST[varieties], $_POST[breeds])->fetchAll();
 		heads("age", $divs, "data-class = '$_POST[classes]' data-breed = '$_POST[breeds]' data-variety= '$_POST[varieties]'", "data-age = ");
-		pick("vpick", conv_variety($_POST[varieties]),"data-class = '$_POST[classes]' data-breed = '$_POST[breeds]' data-variety= '$_POST[varieties]'");
+		pick("vpick", conv_variety($show,$_POST[varieties]),"data-class = '$_POST[classes]' data-breed = '$_POST[breeds]' data-variety= '$_POST[varieties]'");
 	}
 	else if($_POST[type] == "ranks"){
 		$show = get_show($_SESSION[show_id]);

@@ -28,8 +28,8 @@ $birds = birds($show);
 					$breed = $bird[breed];
 					$classname = $bird[classname];
 					$jr = $bird[show_num];
-					$q = "SELECT * from birds where breed_id = $bird[breed_id] and variety_id = $bird[variety_id]";
-					$count = showdb($show)->query($q)->rowCount();
+					$q = "SELECT * from _".$show[id]."_birds where breed_id = $bird[breed_id] and variety_id = $bird[variety_id]";
+					$count = db()->query($q)->rowCount();
 ?>
 </div>
 <div class="page">
