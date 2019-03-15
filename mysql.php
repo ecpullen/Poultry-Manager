@@ -38,16 +38,16 @@ function show_init($id){
 			breed_id int(11),
 			frizzle BOOLEAN, 
 			show_num INT(2));");
-	$showdb->exec("CREATE TABLE ".$name."breeds LIKE info.breeds;
+	$showdb->exec("CREATE TABLE ".$name."breeds LIKE breeds;
 						INSERT INTO ".$name."breeds  
     					SELECT * FROM info.breeds;");
-	$showdb->exec("CREATE TABLE ".$name."varieties LIKE info.varieties;
+	$showdb->exec("CREATE TABLE ".$name."varieties LIKE varieties;
 						INSERT INTO ".$name."varieties  
-    					SELECT * FROM info.varieties;");
+    					SELECT * FROM varieties;");
 	$showdb->exec("CREATE TABLE ".$name."cbv LIKE info.cbv;
 						INSERT INTO ".$name."cbv  
     					SELECT * FROM info.cbv;");
-	$showdb->exec("CREATE TABLE ".$name."sawards LIKE info.sawards;");
+	$showdb->exec("CREATE TABLE ".$name."sawards LIKE sawards;");
 }
 function ex_count($show){
 	$name = "_".$show[id]."_";
