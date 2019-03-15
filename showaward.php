@@ -34,9 +34,15 @@
 		}
 	}
 
+function head(){
+?>
+<script src = "award.js"></script>
+<?php
+}
+
 function main(){
 	$arr = val_and_showdb($_SESSION[username],$_SESSION[password],$_SESSION[show_id]);
-			$show = $arr[show];
+	$show = $arr[show];
 ?>
 <fieldset>
 	<legend>Add Award</legend>
@@ -82,7 +88,7 @@ function main(){
 	</form>
 </fieldset>
 <?php 
-$sawards = get_sawards(val_and_showdb($_SESSION[username],$_SESSION[password],$_SESSION[show_id])[show]);
+$sawards = get_sawards($show);
 ?>
 <div class="display">
 <?php
@@ -97,30 +103,6 @@ foreach ($sawards as $award) {
 }
 ?>
 </div>
-<script type="text/javascript">
-	inputs = [
-		$("<select id='div' name='div' required><option default></option><option value='Large Fowl'>Large Fowl</option><option value='Bantam'>Bantam</option><option value='Waterfowl'>Waterfowl</option></select>"),
-		$("<select id='class' name='class' required><option default></option><?php
-			$classes = get_all_cla();
-			foreach($classes as $cla){
-				?><option value = '<?=$cla[classname]?>'><?=$cla[classname]?><?php
-			}?></select>"),
-		$("<select id='div' name='div' required><option default></option><option value='Large Fowl'>Large Fowl</option><option value='Bantam'>Bantam</option><option value='Waterfowl'>Waterfowl</option></select><input type='text' name='breed' required placeholder='Breed'>"),
-		$("<select id='div' name='div' required><option default></option><option value='Large Fowl'>Large Fowl</option><option value='Bantam'>Bantam</option><option value='Waterfowl'>Waterfowl</option></select><input type='text' name='breed' required placeholder='Breed'><div><input type='text' name='variety' required placeholder='Variety'>"+
-			"Frizzled:<input type='checkbox' name='frizzle' value = '1'></div>"),
-		$("<select id='div' name='div' required><option default></option><option value='Large Fowl'>Large Fowl</option><option value='Bantam'>Bantam</option><option value='Waterfowl'>Waterfowl</option></select><input type='text' name='breed' required placeholder='Breed'><div><input type='text' name='variety' required placeholder='Variety'>"+
-			"Frizzled:<input type='checkbox' name='frizzle' value = '1'></div><select id='age' name='age' required><option default></option><option value='1'>Cock</option><option value='2'>Hen</option><option value='3'>Cockerel</option><option value='4'>Pullet</option>")
-	]
-	console.log(inputs);
-	curType = 1;
-	$("#new #type").change(function(){
-		curType = $("#new #type").val();
-		$("#info").empty()
-		$("#info").append(inputs[curType-2])
-	})
-
-</script>
-
 <?php
-	}
+}
 ?>

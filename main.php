@@ -62,7 +62,7 @@
 	<script src="main.js"></script>
 </head>
 <body>
-	<header id="mainheader">
+	<header id="mainheader" class="h2">
 	<div id="home" class="mainlink">
 		<img src="logo.png">
 		<h3>The Poultry Hub</h3>

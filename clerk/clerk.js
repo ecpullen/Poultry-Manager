@@ -38,9 +38,11 @@ function dodivision(){
 				$(t).parent().append(result);
 				doclass();
 			},
-			error: function(error){
+			error: function(x,y,error){
 				alert("error")
+                console.log(y)
 				console.log(error)
+                console.log(x)
 		}});
 	})
 	$(".spick p").unbind();

@@ -3,9 +3,9 @@ $db;
 
 function db(){
 	if(!isset($db))
-	{$db = new PDO("mysql:dbname=main;host=127.0.0.1",
-				"root",
-				"admin123");
+	{$db = new PDO("mysql:dbname=epiz_23456101_main;host=sql110.epizy.com",
+				"epiz_23456101",
+				"BqyVngXup3");
 	$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);}
 	return $db;
 }
@@ -40,13 +40,13 @@ function show_init($id){
 			show_num INT(2));");
 	$showdb->exec("CREATE TABLE ".$name."breeds LIKE breeds;
 						INSERT INTO ".$name."breeds  
-    					SELECT * FROM info.breeds;");
+    					SELECT * FROM breeds;");
 	$showdb->exec("CREATE TABLE ".$name."varieties LIKE varieties;
 						INSERT INTO ".$name."varieties  
     					SELECT * FROM varieties;");
-	$showdb->exec("CREATE TABLE ".$name."cbv LIKE info.cbv;
+	$showdb->exec("CREATE TABLE ".$name."cbv LIKE cbv;
 						INSERT INTO ".$name."cbv  
-    					SELECT * FROM info.cbv;");
+    					SELECT * FROM cbv;");
 	$showdb->exec("CREATE TABLE ".$name."sawards LIKE sawards;");
 }
 function ex_count($show){
@@ -125,7 +125,7 @@ function get_div($show,$division_id){
 }
 function get_classes($show,$div){
 	$name = "_".$show[id]."_";
-	return db()->query("SELECT DISTINCT classes.classname as data, classes.id, classes.id as var_id FROM ".$name."birds JOIN ".$name."cbv on ".$name."birds.breed_id = ".$name."cbv.breed_id and ".$name."birds.variety_id = ".$name."cbv.variety_id join classes on classes.id = ".$name."cbv.class_id join divisions on divisions.class_id = ".$name."cbv.class_id where divisions.id = $div and ".$name."birds.show_num = $_SESSION[junior] ORDER BY classes.id");
+	return db()->query("SELECT DISTINCT classes.classname as data, classes.id, classes.id as var_id FROM ".$name."birds JOIN ".$name."cbv on ".$name."birds.breed_id = ".$name."cbv.breed_id and ".$name."birds.variety_id = ".$name."cbv.variety_id join classes on classes.id = ".$name."cbv.class_id join divisions on divisions.class_id = ".$name."cbv.class_id where divisions.id = $div and ".$name."birds.show_num = $_SESSION[junior] ORDER BY 'classes.id'");
 }
 function get_classs($show,$cla){
 	return db()->query("SELECT DISTINCT id from classes where classname like '$cla'")->fetch()[id];
@@ -490,7 +490,9 @@ function get_saward_b($show){
 }
 function get_saward_v($show){
 	$name = "_".$show[id]."_";
-	return db()->query("SELECT DISTINCT ".$name."sawards.place, ".$name."breeds.breed, ".$name."breeds.breed as sbre, b.breed as rbre, ".$name."varieties.variety, ".$name."varieties.variety as svar, v.variety as rvar, age, name, ".$name."sawards.variety_id MOD 2 as frizzle, frizzle as sfri, ".$name."sawards.type,".$name."sawards.breed_id, classname, division as sdiv, ".$name."sawards.show_num as junior, color FROM ".$name."sawards join ".$name."cbv on ".$name."cbv.breed_id = ".$name."sawards.breed_id and ".$name."cbv.variety_id = ".$name."sawards.variety_id DIV 2 join classes on classes.id = ".$name."cbv.class_id join (SELECT min(id) as id, min(division) as division, class_id from divisions group by class_id) as d on d.class_id = ".$name."cbv.class_id LEFT JOIN ".$name."awards on ".$name."sawards.type = ".$name."awards.type and ".$name."sawards.place = ".$name."awards.place and number = ".$name."sawards.variety_id  left join show_color on ".$name."awards.show_num = show_color.id left join ".$name."birds on ".$name."birds.id = ".$name."awards.bird_id and ".$name."sawards.show_num = ".$name."birds.show_num and ".$name."birds.breed_id = ".$name."sawards.breed_id join ".$name."breeds on ".$name."breeds.id = ".$name."sawards.breed_id left join ".$name."varieties on ".$name."sawards.variety_id DIV 2=".$name."varieties.id left join ages on ages.id = ".$name."birds.age_id left join ".$name."breeds b on b.id = ".$name."birds.breed_id left join ".$name."varieties v on v.id = ".$name."birds.variety_id left join ".$name."exhibitors on ".$name."birds.ex_id = ".$name."exhibitors.id where ".$name."sawards.type = 'V';")->fetchAll();
+    $db = db();
+    $db->query("SET SQL_BIG_SELECTS=1");
+	return $db->query("SELECT DISTINCT ".$name."sawards.place, ".$name."breeds.breed, ".$name."breeds.breed as sbre, b.breed as rbre, ".$name."varieties.variety, ".$name."varieties.variety as svar, v.variety as rvar, age, name, ".$name."sawards.variety_id MOD 2 as frizzle, frizzle as sfri, ".$name."sawards.type,".$name."sawards.breed_id, classname, division as sdiv, ".$name."sawards.show_num as junior, color FROM ".$name."sawards join ".$name."cbv on ".$name."cbv.breed_id = ".$name."sawards.breed_id and ".$name."cbv.variety_id = ".$name."sawards.variety_id DIV 2 join classes on classes.id = ".$name."cbv.class_id join (SELECT min(id) as id, min(division) as division, class_id from divisions group by class_id) as d on d.class_id = ".$name."cbv.class_id LEFT JOIN ".$name."awards on ".$name."sawards.type = ".$name."awards.type and ".$name."sawards.place = ".$name."awards.place and number = ".$name."sawards.variety_id  left join show_color on ".$name."awards.show_num = show_color.id left join ".$name."birds on ".$name."birds.id = ".$name."awards.bird_id and ".$name."sawards.show_num = ".$name."birds.show_num and ".$name."birds.breed_id = ".$name."sawards.breed_id join ".$name."breeds on ".$name."breeds.id = ".$name."sawards.breed_id left join ".$name."varieties on ".$name."sawards.variety_id DIV 2=".$name."varieties.id left join ages on ages.id = ".$name."birds.age_id left join ".$name."breeds b on b.id = ".$name."birds.breed_id left join ".$name."varieties v on v.id = ".$name."birds.variety_id left join ".$name."exhibitors on ".$name."birds.ex_id = ".$name."exhibitors.id where ".$name."sawards.type = 'V';")->fetchAll();
 }
 function get_saward_r($show){
 	$name = "_".$show[id]."_";

@@ -240,6 +240,14 @@ header .mainlink:hover{
   	header #home{
   		height: 50%;
   	}
+
+    .h2{
+        height: 75%;
+    }
+
+    .h2 #home{
+        height: 66%;
+    }
 	h3{
 		margin:0;
 		font-size: 72pt;
@@ -266,5 +274,9 @@ header .mainlink:hover{
 	input[type="text"],input[type="email"],input[type="password"],input[type="submit"],input[type="button"]{
 	    font-size:36pt;
 	}
+
+    .display{
+        display: none;
+    }
 }
 

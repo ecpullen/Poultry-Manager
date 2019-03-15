@@ -273,7 +273,6 @@
 </div>	
 <?php
 	}
-
 	if($_POST[type] == "R"){
 		$show = get_show($_SESSION[show_id]);
 		for($i = 1; $i < 6; $i ++){

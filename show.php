@@ -1,6 +1,7 @@
 <?php 
 	session_start();
 	include 'mysql.php';
+    $js = 0;
 	if(isset($_SESSION["username"])){
 			if(isset($_POST["show_id"])||isset($_SESSION["show_id"])||isset($_POST["show_name"])){
 				if($_POST[show_name] != ""){
@@ -39,6 +40,7 @@
 				break;
 			case 'aw':
 				require("showaward.php");
+                $js = 1;
 				break;
 			default:
 				require("showhome.php");
@@ -57,6 +59,11 @@
 	<link rel="stylesheet" type="text/css" href="manage.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 	<script src="manager.js"></script>
+    <?php
+        if($js){
+            head();
+        }
+    ?>
 </head>
 <body>
 <header>
