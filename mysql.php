@@ -3,10 +3,15 @@ $db;
 
 function db(){
 	if(!isset($db))
-	{$db = new PDO("mysql:dbname=epiz_23456101_main;host=sql110.epizy.com",
-				"epiz_23456101",
-				"BqyVngXup3");
-	$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);}
+	{
+	// $db = new PDO("mysql:dbname=epiz_23456101_main;host=sql110.epizy.com",
+	// 			"epiz_23456101",
+	// 			"BqyVngXup3");
+		$db = new PDO("mysql:dbname=main;host=127.0.0.1",
+				"root",
+				"admin123");
+		$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+	}
 	return $db;
 }
 function show_init($id){
@@ -51,11 +56,11 @@ function show_init($id){
 }
 function ex_count($show){
 	$name = "_".$show[id]."_";
-	db()->query("SELECT * FROM ".$name."exhibitors")->rowCount();
+	return db()->query("SELECT * FROM ".$name."exhibitors")->rowCount();
 }
 function b_count($show){
 	$name = "_".$show[id]."_";
-	db()->query("SELECT * FROM ".$name."birds")->rowCount();
+	return db()->query("SELECT * FROM ".$name."birds")->rowCount();
 }
 function get_age($age_id){
 	return db()->query("SELECT * FROM ages where id = $age_id")->fetch()[age];
@@ -89,13 +94,6 @@ function check_show($usr_id,$sname){
 function get_show($sname){
 	return db()->query("select * from shows where id = ".$sname.";")->fetch();
 }
-// function db(){
-// 	$showdb = new PDO("mysql:dbname=_$show[id];host=127.0.0.1",
-// 			"root",
-// 			"admin123");
-// 	$showdb->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-// 	return $showdb;
-// }
 function id_from_sname($sname){
 	return db()->query("select * from shows where name = ".db()->quote($sname).";")->fetch()[id];
 }
@@ -105,6 +103,16 @@ function user($uname){
 function birds($show){
 	$name = "_".$show[id]."_";
 	return db()->query("SELECT ".$name."birds.id,classname,breed,variety,age,age_id,ex_id,".$name."birds.breed_id,".$name."birds.variety_id, frizzle, NR, show_num FROM ".$name."birds JOIN ".$name."cbv on ".$name."birds.breed_id = ".$name."cbv.breed_id and ".$name."birds.variety_id = ".$name."cbv.variety_id JOIN ".$name."varieties on ".$name."cbv.variety_id = ".$name."varieties.id join ".$name."breeds on ".$name."cbv.breed_id = ".$name."breeds.id join classes on ".$name."cbv.class_id = classes.id join ages on ".$name."birds.age_id = ages.id ORDER BY show_num,classes.id, breed, NR, variety, frizzle, age_id, ex_id");
+}
+function get_birds_by_num($show, $num){
+	$num = $num % 2;
+	$name = "_".$show[id]."_";
+	if($num == 0){
+		return db()->query("SELECT ".$name."birds.id,classname,breed,variety,age,age_id,ex_id,".$name."birds.breed_id,".$name."birds.variety_id, frizzle, NR, show_num FROM ".$name."birds JOIN ".$name."cbv on ".$name."birds.breed_id = ".$name."cbv.breed_id and ".$name."birds.variety_id = ".$name."cbv.variety_id JOIN ".$name."varieties on ".$name."cbv.variety_id = ".$name."varieties.id join ".$name."breeds on ".$name."cbv.breed_id = ".$name."breeds.id join classes on ".$name."cbv.class_id = classes.id join ages on ".$name."birds.age_id = ages.id where show_num = 0 ORDER BY show_num,classes.id, breed, NR, variety, frizzle, age_id, ex_id");
+	}
+	else if($num == 1){
+		return db()->query("SELECT ".$name."birds.id,classname,breed,variety,age,age_id,ex_id,".$name."birds.breed_id,".$name."birds.variety_id, frizzle, NR, show_num FROM ".$name."birds JOIN ".$name."cbv on ".$name."birds.breed_id = ".$name."cbv.breed_id and ".$name."birds.variety_id = ".$name."cbv.variety_id JOIN ".$name."varieties on ".$name."cbv.variety_id = ".$name."varieties.id join ".$name."breeds on ".$name."cbv.breed_id = ".$name."breeds.id join classes on ".$name."cbv.class_id = classes.id join ages on ".$name."birds.age_id = ages.id where show_num = 1 ORDER BY show_num,classes.id, breed, NR, variety, frizzle, age_id, ex_id");
+	}
 }
 function get_bird($show, $id){
 	$name = "_".$show[id]."_";
@@ -212,7 +220,7 @@ function get_count($show){
 	$name = "_".$show[id]."_";
 	$counts[o] = db()->query("SELECT * FROM ".$name."birds where show_num != 1")->rowCount();
 	$counts[j] = db()->query("SELECT * FROM ".$name."birds where show_num = 1")->rowCount();
-	$counts[o_lf] = db()->query("SELECT ".$name."birds.id,classname,breed,variety,age_id FROM ".$name."birds JOIN ".$name."cbv on ".$name."birds.breed_id = ".$name."cbv.breed_id and ".$name."birds.variety_id = ".$name."cbv.variety_id JOIN ".$name."varieties on ".$name."cbv.variety_id = ".$name."varieties.id join ".$name."breeds on ".$name."cbv.breed_id = ".$name."breeds.id join classes on cbv.class_id = classes.id join divisions ON classes.id = divisions.class_id WHERE divisions.id = 1 and ".$name."birds.show_num != 1")->rowCount();
+	$counts[o_lf] = db()->query("SELECT ".$name."birds.id,classname,breed,variety,age_id FROM ".$name."birds JOIN ".$name."cbv on ".$name."birds.breed_id = ".$name."cbv.breed_id and ".$name."birds.variety_id = ".$name."cbv.variety_id JOIN ".$name."varieties on ".$name."cbv.variety_id = ".$name."varieties.id join ".$name."breeds on ".$name."cbv.breed_id = ".$name."breeds.id join classes on ".$name."cbv.class_id = classes.id join divisions ON classes.id = divisions.class_id WHERE divisions.id = 1 and ".$name."birds.show_num != 1")->rowCount();
 	$counts[j_lf] = db()->query("SELECT ".$name."birds.id,classname,breed,variety,age_id FROM ".$name."birds JOIN ".$name."cbv on ".$name."birds.breed_id = ".$name."cbv.breed_id and ".$name."birds.variety_id = ".$name."cbv.variety_id JOIN ".$name."varieties on ".$name."cbv.variety_id = ".$name."varieties.id join ".$name."breeds on ".$name."cbv.breed_id = ".$name."breeds.id join classes on ".$name."cbv.class_id = classes.id join divisions ON classes.id = divisions.class_id WHERE divisions.id = 1 and ".$name."birds.show_num = 1")->rowCount();
 	$counts[o_btm] = db()->query("SELECT ".$name."birds.id,classname,breed,variety,age_id FROM ".$name."birds JOIN ".$name."cbv on ".$name."birds.breed_id = ".$name."cbv.breed_id and ".$name."birds.variety_id = ".$name."cbv.variety_id JOIN ".$name."varieties on ".$name."cbv.variety_id = ".$name."varieties.id join ".$name."breeds on ".$name."cbv.breed_id = ".$name."breeds.id join classes on ".$name."cbv.class_id = classes.id join divisions ON classes.id = divisions.class_id WHERE divisions.id = 2 and ".$name."birds.show_num != 1")->rowCount();
 	$counts[j_btm] = db()->query("SELECT ".$name."birds.id,classname,breed,variety,age_id FROM ".$name."birds JOIN ".$name."cbv on ".$name."birds.breed_id = ".$name."cbv.breed_id and ".$name."birds.variety_id = ".$name."cbv.variety_id JOIN ".$name."varieties on ".$name."cbv.variety_id = ".$name."varieties.id join ".$name."breeds on ".$name."cbv.breed_id = ".$name."breeds.id join classes on ".$name."cbv.class_id = classes.id join divisions ON classes.id = divisions.class_id WHERE divisions.id = 2 and ".$name."birds.show_num = 1")->rowCount();
@@ -474,11 +482,14 @@ function add_saward_r($show,$place, $div, $bre, $var, $fri, $age, $junior){
 }
 function get_saward_s($show){
 	$name = "_".$show[id]."_";
-	return db()->query("SELECT DISTINCT ".$name."sawards.place, breed as rbre, variety as rvar, age as rage, name, frizzle as rfri, ".$name."sawards.type, ' IN SHOW' as ssho, ".$name."sawards.show_num as junior, color FROM ".$name."sawards LEFT JOIN ".$name."awards on ".$name."sawards.type = ".$name."awards.type and ".$name."sawards.place = ".$name."awards.place left join show_color on ".$name."awards.show_num = show_color.id left join ".$name."birds on ".$name."birds.id = ".$name."awards.bird_id and ".$name."sawards.show_num = ".$name."birds.show_num left join ".$name."breeds on ".$name."breeds.id = ".$name."birds.breed_id left join ".$name."varieties on ".$name."varieties.id = ".$name."birds.variety_id left join ages on ages.id = ".$name."birds.age_id left join ".$name."exhibitors on ".$name."birds.ex_id = ".$name."exhibitors.id where ".$name."sawards.type = 'S';")->fetchAll();
+	// die("SELECT * from ((SELECT DISTINCT *, $show[show1] as s_num FROM ".$name."sawards where type = 'S') UNION (SELECT DISTINCT *, $show[show2] as s_num FROM ".$name."sawards where type = 'S')) as sawards LEFT JOIN ((SELECT * from ".$name."awards where type = 'S') as awards JOIN ".$name."birds as birds on birds.id = awards.bird_id JOIN ".$name."cbv ON birds.variety_id = ".$name."cbv.variety_id and birds.breed_id = ".$name."cbv.breed_id JOIN ".$name."breeds on birds.breed_id = ".$name."breeds.id JOIN ".$name."varieties on ".$name."varieties.id = birds.variety_id JOIN ages on birds.age_id = ages.id) on awards.place = sawards.place and awards.show_num = sawards.s_num and sawards.show_num = birds.show_num");
+	// die("SELECT * from ((SELECT DISTINCT *, $show[show1] as s_num FROM ".$name."sawards where type = 'S') UNION (SELECT DISTINCT *, $show[show2] as s_num FROM ".$name."sawards where type = 'S')) as sawards LEFT JOIN (SELECT * from ".$name."awards where type = 'S') as awards on awards.place = sawards.place and awards.show_num = sawards.s_num LEFT JOIN (SELECT ".$name."birds.ex_id, ".$name."birds.id FROM ".$name."birds JOIN ".$name."cbv ON ".$name."birds.variety_id = ".$name."cbv.variety_id and ".$name."birds.breed_id = ".$name."cbv.breed_id JOIN ".$name."breeds on ".$name."birds.breed_id = ".$name."breeds.id JOIN ".$name."varieties on ".$name."varieties.id = ".$name."birds.variety_id JOIN ages on ".$name."birds.age_id = ages.id) as birds on birds.id = awards.bird_id");
+	return db()->query("SELECT sawards.place, breed as rbre, variety as rvar, age as rage, name, frizzle as rfri, sawards.type, ' IN SHOW' as ssho, sawards.show_num as junior, color FROM ((SELECT DISTINCT *, $show[show1] as s_num FROM ".$name."sawards where type = 'S') UNION (SELECT DISTINCT *, $show[show2] as s_num FROM ".$name."sawards where type = 'S')) as sawards LEFT JOIN ((SELECT * from ".$name."awards where type = 'S') as awards JOIN ".$name."birds as birds on birds.id = awards.bird_id JOIN ".$name."cbv ON birds.variety_id = ".$name."cbv.variety_id and birds.breed_id = ".$name."cbv.breed_id JOIN ".$name."breeds on birds.breed_id = ".$name."breeds.id JOIN ".$name."varieties on ".$name."varieties.id = birds.variety_id JOIN ages on birds.age_id = ages.id JOIN ".$name."exhibitors on birds.ex_id = ".$name."exhibitors.id) on awards.place = sawards.place and awards.show_num = sawards.s_num and sawards.show_num = birds.show_num JOIN show_color on sawards.s_num = show_color.id")->fetchAll();
 }
 function get_saward_d($show){
 	$name = "_".$show[id]."_";
-	return db()->query("SELECT DISTINCT ".$name."sawards.place, breed as rbre, variety as rvar, age as rage, name, frizzle as rfri, ".$name."sawards.type ,division as sdiv, ".$name."sawards.show_num as junior, color FROM ".$name."sawards join divisions on divisions.id = ".$name."sawards.division_id LEFT JOIN ".$name."awards on ".$name."sawards.type = ".$name."awards.type and ".$name."sawards.place = ".$name."awards.place and number = divisions.id  left join show_color on ".$name."awards.show_num = show_color.id left join ".$name."birds on ".$name."birds.id = ".$name."awards.bird_id and ".$name."sawards.show_num = ".$name."birds.show_num left join ".$name."breeds on ".$name."breeds.id = ".$name."birds.breed_id left join ".$name."varieties on ".$name."varieties.id = ".$name."birds.variety_id left join ages on ages.id = ".$name."birds.age_id left join ".$name."exhibitors on ".$name."birds.ex_id = ".$name."exhibitors.id where ".$name."sawards.type = 'D';")->fetchAll();
+	// return db()->query("SELECT DISTINCT ".$name."sawards.place, breed as rbre, variety as rvar, age as rage, name, frizzle as rfri, ".$name."sawards.type ,division as sdiv, ".$name."sawards.show_num as junior, color FROM ".$name."sawards join divisions on divisions.id = ".$name."sawards.division_id LEFT JOIN ".$name."awards on ".$name."sawards.type = ".$name."awards.type and ".$name."sawards.place = ".$name."awards.place and number = divisions.id  left join show_color on ".$name."awards.show_num = show_color.id left join ".$name."birds on ".$name."birds.id = ".$name."awards.bird_id and ".$name."sawards.show_num = ".$name."birds.show_num left join ".$name."breeds on ".$name."breeds.id = ".$name."birds.breed_id left join ".$name."varieties on ".$name."varieties.id = ".$name."birds.variety_id left join ages on ages.id = ".$name."birds.age_id left join ".$name."exhibitors on ".$name."birds.ex_id = ".$name."exhibitors.id where ".$name."sawards.type = 'D';")->fetchAll();
+	return db()->query("SELECT sawards.place, breed as rbre, variety as rvar, age as rage, name, frizzle as rfri, sawards.type, division as sdiv, sawards.show_num as junior, color FROM ((SELECT DISTINCT *, $show[show1] as s_num FROM ".$name."sawards where type = 'D') UNION (SELECT DISTINCT *, $show[show2] as s_num FROM ".$name."sawards where type = 'D')) as sawards LEFT JOIN ((SELECT * from ".$name."awards where type = 'D') as awards JOIN ".$name."birds as birds on birds.id = awards.bird_id JOIN ".$name."cbv ON birds.variety_id = ".$name."cbv.variety_id and birds.breed_id = ".$name."cbv.breed_id JOIN ".$name."breeds on birds.breed_id = ".$name."breeds.id JOIN ".$name."varieties on ".$name."varieties.id = birds.variety_id JOIN ages on birds.age_id = ages.id JOIN ".$name."exhibitors on birds.ex_id = ".$name."exhibitors.id join divisions on ".$name."cbv.class_id = divisions.class_id) on awards.place = sawards.place and awards.show_num = sawards.s_num and sawards.show_num = birds.show_num JOIN show_color on sawards.s_num = show_color.id")->fetchAll();
 }
 function get_saward_c($show){
 	$name = "_".$show[id]."_";

@@ -18,19 +18,21 @@ p{
 }
 
 .division, .spick{
-	background-color: #FDD;
+	background-color: #AAA;
+	border: 2px solid black;
+	border-bottom: none;
 }
 .class, .dpick{
-	background-color: #FDF;
+	background-color: #BBB;
 }
 .breed, .cpick{
-	background-color: #DFF;
+	background-color: #CCC;
 }
 .variety, .bpick{
-	background-color: #EEF;
+	background-color: #DDD;
 }
 .age, .vpick{
-	background-color: #FEF;
+	background-color: #EEE;
 }
 .row.entry, .row.entry p{
 	text-align: left;

@@ -42,6 +42,10 @@
 				require("showaward.php");
                 $js = 1;
 				break;
+			case 'p':
+				require("showprintables.php");
+				$js = 1;
+				break;
 			default:
 				require("showhome.php");
 				break;
@@ -80,11 +84,14 @@
 	<div id="birds" class="mainlink">
 		<h3>Birds</h3>
 	</div>
-	<div id="cs" class="mainlink">
+	<!-- <div id="cs" class="mainlink">
 		<h3>Clerk Sheets</h3>
 	</div>
 	<div id="ct" class="mainlink">
 		<h3>Coop Tags</h3>
+	</div> -->
+	<div id="p" class="mainlink">
+		<h3>Printables</h3>
 	</div>
 	<div id="aw" class="mainlink">
 		<h3>Awards</h3>

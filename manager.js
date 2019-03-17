@@ -24,6 +24,10 @@ $(document).ready(function(){
 		console.log("here")
 		window.location.href = "show.php?p=ct";
 	})
+	$("#p").click(function(){
+		console.log("print")
+		window.location.href = "show.php?p=p";
+	})
 	$("#aw").click(function(){
 		console.log("here")
 		window.location.href = "show.php?p=aw";

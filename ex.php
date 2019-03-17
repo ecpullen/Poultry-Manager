@@ -78,28 +78,35 @@
 </head>
 	<body>
 		<header>
-			<div id="show" class="mainlink">
-				<h3><?=$show[name]?></h3>
-			</div>
-			<div id="ex" class="mainlink">
-				<h3>Exhibitors</h3>
-			</div>
-			<div id="birds" class="mainlink">
-				<h3>Birds</h3>
-			</div>
-			<div id="cs" class="mainlink">
-				<h3>Clerk Sheets</h3>
-			</div>
-			<div id="ct" class="mainlink">
-				<h3>Coop Tags</h3>
-			</div>
-			<div id="aw" class="mainlink">
-				<h3>Awards</h3>
-			</div>
-			<div id="lo" class="mainlink">
-				<h3>Logout</h3>
-			</div>
-		</header>
+	<div id="home" class="mainlink">
+		<img src="logo.png">
+		<h3>The Poultry Hub</h3>
+	</div>
+	<div id="show" class="mainlink">
+		<h3><?=$show[name]?></h3>
+	</div>
+	<div id="ex" class="mainlink">
+		<h3>Exhibitors</h3>
+	</div>
+	<div id="birds" class="mainlink">
+		<h3>Birds</h3>
+	</div>
+	<!-- <div id="cs" class="mainlink">
+		<h3>Clerk Sheets</h3>
+	</div>
+	<div id="ct" class="mainlink">
+		<h3>Coop Tags</h3>
+	</div> -->
+	<div id="p" class="mainlink">
+		<h3>Printables</h3>
+	</div>
+	<div id="aw" class="mainlink">
+		<h3>Awards</h3>
+	</div>
+	<div id="lo" class="mainlink">
+		<h3>Logout</h3>
+	</div>
+</header>
 
 		<fieldset>
 			<legend>Edit Exhibitor</legend>
@@ -250,28 +257,35 @@
 </head>
 	<body>
 		<header>
-			<div id="show" class="mainlink">
-				<h3><?=$show[name]?></h3>
-			</div>
-			<div id="ex" class="mainlink">
-				<h3>Exhibitors</h3>
-			</div>
-			<div id="birds" class="mainlink">
-				<h3>Birds</h3>
-			</div>
-			<div id="cs" class="mainlink">
-				<h3>Clerk Sheets</h3>
-			</div>
-			<div id="ct" class="mainlink">
-				<h3>Coop Tags</h3>
-			</div>
-			<div id="aw" class="mainlink">
-				<h3>Awards</h3>
-			</div>
-			<div id="lo" class="mainlink">
-				<h3>Logout</h3>
-			</div>
-		</header>
+	<div id="home" class="mainlink">
+		<img src="logo.png">
+		<h3>The Poultry Hub</h3>
+	</div>
+	<div id="show" class="mainlink">
+		<h3><?=$show[name]?></h3>
+	</div>
+	<div id="ex" class="mainlink">
+		<h3>Exhibitors</h3>
+	</div>
+	<div id="birds" class="mainlink">
+		<h3>Birds</h3>
+	</div>
+	<!-- <div id="cs" class="mainlink">
+		<h3>Clerk Sheets</h3>
+	</div>
+	<div id="ct" class="mainlink">
+		<h3>Coop Tags</h3>
+	</div> -->
+	<div id="p" class="mainlink">
+		<h3>Printables</h3>
+	</div>
+	<div id="aw" class="mainlink">
+		<h3>Awards</h3>
+	</div>
+	<div id="lo" class="mainlink">
+		<h3>Logout</h3>
+	</div>
+</header>
 <fieldset>
 			<legend>New Exhibitor</legend>
 			<form id="n_ex" action="ex.php" method="POST">

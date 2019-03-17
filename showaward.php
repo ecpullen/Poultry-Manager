@@ -96,7 +96,7 @@ $places = ["BEST", "RESERVE", "THIRD", "FOURTH", "FIFTH"];
 foreach ($sawards as $award) {
 ?>
 	<div class="row">
-		<p class="half"><?=$award[place]<6?$places[$award[place]-1]:$award[place]."th"?><?=$award[junior]?" JUNIOR":""?> <?=$award[ssho]?> <?=strtoupper($award[scla])?> <?=strtoupper($award[svar])?> <?=$award[sfri]?"FRIZZLE":""?> <?=strtoupper($award[sbre])?> <?=($award[sdiv] != "Waterfowl" && $award[sbre] != "Call")?strtoupper($award[sdiv]):""?> <?=strtoupper($award[sage])?> <?=strtoupper($award[color])?></p>
+		<p class="half"><?=$award[place]<6?$places[$award[place]-1]:$award[place]."th"?><?=$award[junior]?" JUNIOR":""?> <?=$award[ssho]?> <?=strtoupper($award[scla])?> <?=strtoupper($award[svar])?> <?=$award[sfri]?"FRIZZLE":""?> <?=strtoupper($award[sbre])?> <?=(($award[sdiv] != "Waterfowl" && $award[sbre] != "Call")|| !$award[sbre])?strtoupper($award[sdiv]):""?> <?=strtoupper($award[sage])?> <?=strtoupper($award[color])?></p>
 		<p class="half"><?=strtoupper($award[rcla])?> <?=strtoupper($award[rvar])?> <?=$award[rfri]?"FRIZZLE":""?> <?=strtoupper($award[rbre])?> <?=strtoupper($award[rdiv])?> <?=strtoupper($award[rage])?> <?=$award[name]?"By: $award[name]":""?></p>
 	</div>
 <?php

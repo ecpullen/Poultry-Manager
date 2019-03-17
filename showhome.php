@@ -6,12 +6,11 @@
 		try{
 			$arr = val_and_showdb($_SESSION[username],$_SESSION[password],$_SESSION[show_id]);
 			$show = $arr[show];
-			// $showdb = showdb($arr[show]);
-			$ex = ex_count($arr[show]);
-			$bnum = b_count($arr[show]);
-			$lf = get_LF($arr[show])->rowCount();
-			$btm = get_BTM($arr[show])->rowCount();
-			$wf = get_WF($arr[show])->rowCount();
+			$ex = ex_count($show);
+			$bnum = b_count($show);
+			$lf = get_LF($show)->rowCount();
+			$btm = get_BTM($show)->rowCount();
+			$wf = get_WF($show)->rowCount();
 			}
 		catch(PDOException $e){
 			die($e);
